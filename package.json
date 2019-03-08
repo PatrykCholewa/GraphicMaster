@@ -1,11 +1,33 @@
 {
   "name": "graphicmaster",
   "version": "0.1.0",
+  "description": "Graphics renderer",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PatrykCholewa/GraphicMaster.git"
+  },
+  "author": "Patryk Cholewa",
+  "license": "SEE LICENSE IN LICENSE",
+  "bugs": {
+    "url": "https://github.com/PatrykCholewa/GraphicMaster/issues"
+  },
+  "homepage": "https://github.com/PatrykCholewa/GraphicMaster#readme",
   "private": true,
   "dependencies": {
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
     "react-scripts": "2.1.8"
+  },
+  "devDependencies": {
+    "stylelint": "latest",
+    "stylelint-config-recommended": "latest",
+    "stylelint-config-standard": "latest"
+  },
+  "stylelint": {
+    "extends": "stylelint-config-recommended",
+    "rules": {
+      "indentation": 4
+    }
   },
   "scripts": {
     "start": "react-scripts start",

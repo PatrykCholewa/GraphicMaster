@@ -1,28 +1,17 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {getLengthAsDiv} from "./render";
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
+    render() {
+        return (
+            <div className="App">
+                {getLengthAsDiv({point1: {x: 50, y: 50}, point2: {x: 30, y: 30}})}
+                {getLengthAsDiv({point1: {x: 50, y: 50}, point2: {x: 70, y: 70}})}
+                {getLengthAsDiv({point1: {x: 50, y: 50}, point2: {x: 70, y: 30}})}
+                {getLengthAsDiv({point1: {x: 50, y: 50}, point2: {x: 30, y: 70}})}
+            </div>
+        );
+    }
 }
 
 export default App;
