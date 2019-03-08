@@ -1,11 +1,11 @@
 import React from 'react';
-import {getLengthWidth} from "./length.js";
+import {getLengthWidth} from "./length";
 
 /*
     point = {x: 0-100, y: 0-100};
  */
 
-export const getLengthAsDiv = length => (<div class='length' style={getLengthDivStyle(length)}/>);
+export const getLengthAsDiv = length => (<div className='length' style={getLengthDivStyle(length)}/>);
 
 const getLengthDivStyle = length => ({
     "width": getLengthWidth(length) + '%',
