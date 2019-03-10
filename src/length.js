@@ -1,23 +1,14 @@
-import {asVect, Matrix} from "./algebra";
+import {asVect} from "./algebra";
 
 export const asVectArr = length => length.map(pointMtx => asVect(pointMtx));
 
-export const getLengthMiddlePoint = length => {
-    const lenArr = asVectArr(length);
-    return new Matrix([
-        (lenArr[0][0] + lenArr[1][0]) / 2,
-        (lenArr[0][1] + lenArr[1][1]) / 2,
-        lenArr[0][2] !== undefined ? (lenArr[0][2] + lenArr[1][2]) / 2 : undefined
-    ]);
-};
+export const getLengthMiddlePoint = length => length[0].plus(length[1])
+                                                       .mulEach(0.5);
 
 export const getLengthWidth = length => {
-    const lenArr = asVectArr(length);
-    return Math.sqrt(
-        diffSqr(lenArr[0][1], lenArr[1][1])
-        + diffSqr(lenArr[0][0], lenArr[1][0])
-        + (lenArr[0][2] ? diffSqr(lenArr[0][2], lenArr[1][2]) : 0)
-    );
+    const lengthEnd = asVect(length[1]);
+    const squaredWidth = length[0].eleMap( (val, row, col) => (val - lengthEnd[col]) * (val - lengthEnd[col]))
+                                  .toArray()[0]
+                                  .reduce( (acc, val) => acc + val, 0);
+    return Math.sqrt(squaredWidth);
 };
-
-const diffSqr = (dim1, dim2) => (dim1 - dim2) * (dim1 - dim2);
