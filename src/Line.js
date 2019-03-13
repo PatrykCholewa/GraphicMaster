@@ -2,13 +2,12 @@ import Vector from "./Vector";
 
 export default class Line {
 
-    static getDirectional(length) {
-        const [p0, p1] = length;
+    static getDirectionalOfLength(l) {
 
         return new Vector([
-            p0[1]*p1[2] - p0[2]*p1[1],
-            p0[2]*p1[0] - p0[0]*p1[2],
-            p0[0]*p1[1] - p0[1]*p0[0]
+            l[0][1]*l[1][2] - l[0][2]*l[1][1],
+            l[0][2]*l[1][0] - l[0][0]*l[1][2],
+            l[0][0]*l[1][1] - l[0][1]*l[0][0]
         ]);
     };
 
