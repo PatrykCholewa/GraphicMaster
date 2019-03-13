@@ -1,5 +1,6 @@
 import React from 'react';
 import {asVectArr, getLengthWidth} from "./length";
+import * as Camera from './camera';
 
 export const getLengthAsDiv = length => (<div className='length' style={getLengthDivStyle(length)}/>);
 

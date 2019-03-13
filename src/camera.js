@@ -1,21 +1,36 @@
 import {Matrix, vectProd} from './algebra';
-import {getPlainNormal} from "./plain";
+import {getPlainDirectionalByPlain, getPlainNormalByPoints, getPointProjectionOfPoint} from "./plain";
+import {getLineDirectional} from "./line";
 
-export const INITIAL_CAMERA = {
-    corners: [
-        new Matrix([-4, -3, 0]),
-        new Matrix([-4, 3, 0]),
-        new Matrix([4, 3, 0]),
-        new Matrix([4, -3, 0])
-    ],
-    focus: new Matrix([0, 0, 5])
-};
+export class Camera {
+
+    constructor(plain, focus) {
+        this._plain = plain;
+        this._focus = focus;
+    }
+
+    get plain() {
+        return this._plain;
+    }
+
+    get focus() {
+        return this._focus;
+    }
+
+}
+
+export const INITIAL_CAMERA = new Camera([0, 0, 1, 0], new Matrix([0, 0, 5]));
 
 // export const getViewOfLength = (camera, length) => {
-//     const cameraPlainNormal = getPlainNormal(camera.corners);
-//     const projectionPlainNormal = getPlainNormal([camera.focus, ...length]);
+//     const projectionPlainNormal = getPlainNormalByPoints([camera.focus, ...length]);
 //
-//     const viewDirectionVector = vectProd(cameraPlainNormal, projectionPlainNormal);
+//     const viewDirectionVector = vectProd(getPlainDirectionalByPlain(camera.plain), projectionPlainNormal);
+//     const lengthDirectionVector = getLineDirectional(length);
 //
-//
+//     console.log(projectionPlainNormal);
+//     console.log(viewDirectionVector);
+//     console.log(lengthDirectionVector);
 // } ;
+//
+// getViewOfLength(INITIAL_CAMERA, [new Matrix([-5, 0, 10]), new Matrix([5, 0, 10])]);
+// console.log(getPointProjectionOfPoint(INITIAL_CAMERA.plain, INITIAL_CAMERA.focus));
