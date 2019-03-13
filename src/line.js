@@ -1,8 +1,7 @@
 import {Matrix} from "./algebra";
-import {asVectArr} from "./length";
 
 export const getLineDirectional = length => {
-    const [p0, p1] = asVectArr(length);
+    const [p0, p1] = length.pointArr;
 
     return new Matrix([
         p0[1]*p1[2] - p0[2]*p1[1],
