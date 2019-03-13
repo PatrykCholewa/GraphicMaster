@@ -1,6 +1,6 @@
-import {getLineDirectional} from "./line";
 import Vector from "./Vector";
 import Plain from './Plain';
+import Line from "./Line";
 
 export default class Camera {
 
@@ -25,7 +25,7 @@ export const getViewOfLength = (camera, length) => {
     const projectionPlain = Plain.getPlainByPoints([camera.focus, ...length]);
 
     const viewDirectionVector = camera.plain.normal.vectProd(projectionPlain.normal);
-    const lengthDirectionVector = getLineDirectional(length);
+    const lengthDirectionVector = Line.getDirectional(length);
 
     console.log(projectionPlain);
     console.log(projectionPlain.normal);
