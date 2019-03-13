@@ -1,16 +1,47 @@
 import React, { Component } from 'react';
 import {INITIAL_CAMERA, OBJECTS_TO_RENDER} from "./objects";
+import Camera from "./Camera";
 
 export default class App extends Component {
 
     constructor(props) {
         super(props);
 
-        this._camera = INITIAL_CAMERA;
+        this.state = {
+            camera: INITIAL_CAMERA
+        };
+    }
+
+    componentDidMount() {
+        document.addEventListener("keydown", event => this._onKeyPress(event) , false);
+    }
+
+    _onKeyPress(event) {
+        console.log(event.which);
+        switch(event.which) {
+            case 38:
+                this.setState({camera: this.state.camera.move(Camera.DIRECTION.UP)});
+                break;
+            case 37:
+                this.setState({camera: this.state.camera.move(Camera.DIRECTION.LEFT)});
+                break;
+            case 39:
+                this.setState({camera: this.state.camera.move(Camera.DIRECTION.RIGHT)});
+                break;
+            case 40:
+                this.setState({camera: this.state.camera.move(Camera.DIRECTION.DOWN)});
+                break;
+            case 104:
+                this.setState({camera: this.state.camera.move(Camera.DIRECTION.IN)});
+                break;
+            case 98:
+                this.setState({camera: this.state.camera.move(Camera.DIRECTION.OUT)});
+                break;
+        }
     }
 
     _lengthProjectionOnCamera(length, key) {
-        return this._getLengthAsDiv( this._camera.getViewOfLength(length), key );
+        return this._getLengthAsDiv( this.state.camera.getViewOfLength(length), key );
     }
 
     _getLengthAsDiv(length, key) {
