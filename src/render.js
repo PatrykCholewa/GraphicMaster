@@ -1,10 +1,10 @@
 import React from 'react';
-import * as Camera from './camera';
+import {INITIAL_CAMERA} from './camera';
 
 export const getLengthAsDiv = length => (<div className='length' style={getLengthDivStyle(length)}/>);
 
 const getLengthDivStyle = length => {
-    const lenArr = length.getAsArray();
+    const lenArr = length;
     return {
         "width": length.width + '%',
         "left": lenArr[0][0] + '%',
@@ -14,7 +14,7 @@ const getLengthDivStyle = length => {
 };
 
 const getLengthAngle = length => {
-    const lenArr = length.getAsArray();
+    const lenArr = length;
     const a = lenArr[1][1] - lenArr[0][1];
     const c = length.width;
     const sin = a / c;

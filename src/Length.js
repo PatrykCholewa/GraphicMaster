@@ -1,5 +1,3 @@
-import {asVect} from "./algebra";
-
 export default class Length {
 
     constructor(point0, point1) {
@@ -16,14 +14,10 @@ export default class Length {
     }
 
     get width() {
-        const lengthEnd = asVect(this._point1);
+        const lengthEnd = this._point1;
         const squaredWidth = this._point0.eleMap( (val, row, col) => (val - lengthEnd[col]) * (val - lengthEnd[col]))
                                               .getSum();
         return Math.sqrt(squaredWidth);
-    }
-
-    getAsArray() {
-        return [asVect(this._point0), asVect(this._point1)];
     }
 
     getMiddlePoint() {

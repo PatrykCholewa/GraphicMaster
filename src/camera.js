@@ -1,8 +1,8 @@
-import {Matrix, vectProd} from './algebra';
 import {getPlainDirectionalByPlain, getPlainNormalByPoints, getPointProjectionOfPoint} from "./plain";
 import {getLineDirectional} from "./line";
+import Vector from "./Vector";
 
-export class Camera {
+export default class Camera {
 
     constructor(plain, focus) {
         this._plain = plain;
@@ -19,7 +19,7 @@ export class Camera {
 
 }
 
-export const INITIAL_CAMERA = new Camera([0, 0, 1, 0], new Matrix([0, 0, 5]));
+export const INITIAL_CAMERA = new Camera([0, 0, 1, 0], new Vector([0, 0, 5]));
 
 // export const getViewOfLength = (camera, length) => {
 //     const projectionPlainNormal = getPlainNormalByPoints([camera.focus, ...length]);

@@ -1,8 +1,8 @@
-import {asVect, Matrix, vectProd} from "./algebra";
+import Vector from "./Vector";
 
 export const getPlainByPoints = points => {
     const plainNormal = getPlainNormalByPoints(points);
-    const d = plainNormal.eleMap( (val, row, col) => -val * asVect(points[0])[col] )
+    const d = plainNormal.eleMap( (val, row, col) => -val * points[0][col] )
                          .getSum();
 
     const perpData = plainNormal.toArray()[0];
@@ -11,7 +11,7 @@ export const getPlainByPoints = points => {
     return perpData;
 };
 
-export const getPlainDirectionalByPlain = plain => new Matrix([plain.slice(0,3)]);
+export const getPlainDirectionalByPlain = plain => new Vector([plain.slice(0,3)]);
 
 export const getPlainNormalByPoints = points => {
     if (points.length < 3) {
@@ -20,7 +20,7 @@ export const getPlainNormalByPoints = points => {
 
     const [p1, p2, p3] = points;
 
-    return vectProd(p1.minus(p2) ,p2.minus(p3));
+    return p1.minus(p2).vectProd( p2.minus(p3) );
 };
 
 export const getPointProjectionOfPoint = (plain, point) => {
