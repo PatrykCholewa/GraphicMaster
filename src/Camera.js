@@ -27,5 +27,3 @@ export default class Camera {
 }
 
 export const INITIAL_CAMERA = new Camera(new Plain([0, 0, 1, 0]), new Vector([0, 0, 5]));
-
-console.log(INITIAL_CAMERA.getViewOfLength(new Length(new Vector([-5, 0, 10]), new Vector([5, 0, 10]))));

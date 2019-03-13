@@ -16,21 +16,19 @@ export default class App extends Component {
     }
 
     _getLengthDivStyle(length) {
-        const lenArr = length;
         return {
             "width": length.width + '%',
-            "left": lenArr[0][0] + '%',
-            "top": lenArr[0][1] + '%',
+            "left": length[0][0] + '%',
+            "top": length[0][1] + '%',
             "transform": `rotate(${this._getLengthAngle(length)}rad)`
         };
     };
 
     _getLengthAngle(length) {
-        const lenArr = length;
-        const a = lenArr[1][1] - lenArr[0][1];
+        const a = length[1][1] - length[0][1];
         const c = length.width;
         const sin = a / c;
-        const horizontalHalf = lenArr[0][0] > lenArr[1][0] ? Math.PI / 2 : 0;
+        const horizontalHalf = length[0][0] > length[1][0] ? Math.PI / 2 : 0;
         const verticalHalf = Math.asin(sin);
         return verticalHalf > 0 ? verticalHalf + horizontalHalf : verticalHalf - horizontalHalf;
     };
