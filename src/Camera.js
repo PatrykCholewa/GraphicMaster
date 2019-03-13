@@ -23,9 +23,9 @@ export default class Camera {
         const move = this._directions[direction];
         if( move !== undefined ) {
             this._focus.plus_(this._directions[direction]);
-            return this;
         }
 
+        return this;
     }
 
     getViewOfLength(length) {

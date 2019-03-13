@@ -1,3 +1,5 @@
+import Vector from "./Vector";
+
 export default class Length {
 
     constructor(point0, point1) {
@@ -27,6 +29,10 @@ export default class Length {
     getMiddlePoint() {
         return this._point0.plus(this._point1)
                            .mulEach(0.5);
+    }
+
+    static crateByPointDims(pointArr1, pointArr2) {
+        return new Length(new Vector(pointArr1), new Vector(pointArr2));
     }
 
 }

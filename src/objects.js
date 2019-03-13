@@ -14,8 +14,8 @@ directions[Camera.DIRECTION.DOWN] = new Vector([0, -1, 0]);
 export const INITIAL_CAMERA = new Camera(new Plain([0, 0, 1, 0]), new Vector([0, 0, 5]), directions);
 
 export const OBJECTS_TO_RENDER = [
-    new Length(new Vector([0, 0, 100]), new Vector([-200, -200, 100])),
-    new Length(new Vector([0, 0, 100]), new Vector([200, 200, 100])),
-    new Length(new Vector([0, 0, 100]), new Vector([200, -200, 100])),
-    new Length(new Vector([0, 0, 100]), new Vector([-200, 200, 100]))
+    Length.crateByPointDims([-80, -5, 100], [-40, -5, 50]),
+    Length.crateByPointDims([-80, -5, 100], [-40, -5, 150]),
+    Length.crateByPointDims([0, -5, 100], [-40, -5, 50]),
+    Length.crateByPointDims([0, -5, 100], [-40, -5, 150])
 ];
