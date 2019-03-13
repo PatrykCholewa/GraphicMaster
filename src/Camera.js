@@ -3,9 +3,10 @@ import Length from "./Length";
 
 export default class Camera {
 
-    constructor(plain, focus) {
+    constructor(plain, focus, directions) {
         this._plain = plain;
         this._focus = focus;
+        this._directions = directions;
     }
 
     get plain() {
@@ -17,8 +18,14 @@ export default class Camera {
     }
 
     move(direction) {
-        console.log(direction);
-        return this;
+        console.log("MOVE: ", direction);
+
+        const move = this._directions[direction];
+        if( move !== undefined ) {
+            this._focus.plus_(this._directions[direction]);
+            return this;
+        }
+
     }
 
     getViewOfLength(length) {

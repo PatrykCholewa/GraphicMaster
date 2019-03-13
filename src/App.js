@@ -17,7 +17,6 @@ export default class App extends Component {
     }
 
     _onKeyPress(event) {
-        console.log(event.which);
         switch(event.which) {
             case 38:
                 this.setState({camera: this.state.camera.move(Camera.DIRECTION.UP)});
@@ -49,7 +48,6 @@ export default class App extends Component {
     }
 
     _getLengthDivStyle(length) {
-        console.log(length);
         return {
             "width": length.width + '%',
             "left": (length[0][0] + 50) + '%',
