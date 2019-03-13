@@ -10,6 +10,22 @@ export default class Plain {
         return new Vector(this._vect.slice(0,3));
     }
 
+    get A() {
+        return this._vect[0];
+    }
+
+    get B() {
+        return this._vect[1];
+    }
+
+    get C() {
+        return this._vect[2];
+    }
+
+    get D() {
+        return this._vect[3];
+    }
+
     getProjectionOfPoint(point) {
         const normal = this.normal;
 

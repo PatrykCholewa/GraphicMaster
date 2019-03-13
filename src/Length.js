@@ -13,6 +13,10 @@ export default class Length {
         return this._point1;
     }
 
+    mapPoints(map) {
+        return new Length(map(this._point0), map(this._point1));
+    }
+
     get width() {
         const lengthEnd = this._point1;
         const squaredWidth = this._point0.eleMap( (val, row, col) => (val - lengthEnd[col]) * (val - lengthEnd[col]))

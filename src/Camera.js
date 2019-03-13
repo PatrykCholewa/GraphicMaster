@@ -19,20 +19,13 @@ export default class Camera {
     }
 
     getViewOfLength(length) {
-        const projectionPlain = Plain.getPlainByPoints([this._focus, length[0], length[1]]);
-
-        const viewDirectionVector = this._plain.normal.vectProd(projectionPlain.normal);
-        const lengthDirectionVector = Line.getDirectionalOfLength(length);
-
-        console.log(projectionPlain);
-        console.log(projectionPlain.normal);
-        console.log(viewDirectionVector);
-        console.log(lengthDirectionVector);
+        return length.mapPoints( point => Line.getByLength(new Length(point, this._focus))
+                                              .getIntersectionPointWithPlain(this._plain)
+        );
     }
 
 }
 
 export const INITIAL_CAMERA = new Camera(new Plain([0, 0, 1, 0]), new Vector([0, 0, 5]));
 
-INITIAL_CAMERA.getViewOfLength(new Length(new Vector([-5, 0, 10]), new Vector([5, 0, 10])));
-console.log(INITIAL_CAMERA.plain.getProjectionOfPoint(INITIAL_CAMERA.focus));
+console.log(INITIAL_CAMERA.getViewOfLength(new Length(new Vector([-5, 0, 10]), new Vector([5, 0, 10]))));
