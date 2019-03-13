@@ -1,5 +1,5 @@
 import React from 'react';
-import {INITIAL_CAMERA} from './camera';
+import {INITIAL_CAMERA} from './Camera';
 
 export const getLengthAsDiv = length => (<div className='length' style={getLengthDivStyle(length)}/>);
 

@@ -15,9 +15,28 @@ export default class Vector extends Matrix {
         return this.data[0][2];
     }
 
-    vectProd(vector) {
+    plus(vector) {
+        return new Vector(super.plus(vector).data);
+    }
+
+    minus(vector) {
+        return new Vector(super.minus(vector).data);
+    }
+
+    mul(vector) {
+        return new Vector(super.mul(vector).data);
+    }
+
+    mulEach(c) {
+        return new Vector(super.mulEach(c).data);
+    }
+
+    eleMap(map) {
+        return new Vector(super.eleMap(map).data);
+    }
+
+    vectProd(v2) {
         const v1 = this.data[0];
-        const v2 = vector.data;
 
         return new Vector([
             v1[1]*v2[2] - v1[2]*v2[1],
