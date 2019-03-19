@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import {INITIAL_CAMERA, OBJECTS_TO_RENDER} from "./objects";
 import Camera from "./Camera";
 
+import './cpy';
+
 export default class App extends Component {
 
     constructor(props) {
@@ -10,6 +12,8 @@ export default class App extends Component {
         this.state = {
             camera: INITIAL_CAMERA
         };
+
+        this._context = null;
     }
 
     componentDidMount() {
@@ -37,6 +41,7 @@ export default class App extends Component {
             case 98:
                 this.setState({camera: this.state.camera.move(Camera.DIRECTION.OUT)});
                 break;
+            default:
         }
     }
 
@@ -70,7 +75,8 @@ export default class App extends Component {
     render() {
         return (
             <div className="App">
-                {OBJECTS_TO_RENDER.map((length, idx) => this._lengthProjectionOnCamera(length, idx))}
+                <canvas id="display" ref={ctx => this._context = ctx.getContext('2d')}/>
+                {/*OBJECTS_TO_RENDER.map((length, idx) => this._lengthProjectionOnCamera(length, idx))*/}
             </div>
         );
     }

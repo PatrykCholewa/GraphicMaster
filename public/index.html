@@ -3,30 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <title>Graphic Master</title>
-    <style>
-        body {
-            margin: 0;
-        }
-
-        main {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            position: absolute;
-            background: dimgray;
-        }
-
-        /*noinspection CssUnusedSymbol*/
-        .length {
-            border: 0.5px red solid;
-            height: 0;
-            background-color: red;
-            position: absolute;
-            transform-origin: 0 0;
-        }
-    </style>
+    <link rel="stylesheet" href="main.css">
 </head>
 <body>
+<canvas id="world">
+    <p class="noCanvas">You need a modern browser to view this.</p>
+</canvas>
+<canvas id="world2">
+    <p class="noCanvas">You need a modern browser to view this.</p>
+</canvas>
+
+<div id="options">
+    <a id="rotation-button" class="switch" title="Toggles Rotation." href="#">ROTATION</a>
+    <a id="status-button" class="switch" title="Toggles Status Counters ON/OFF." href="#">STATUS</a>
+    <!-- <a id="reset-button" class="switch" title="Resets camera and Time." href="#">RESET</a> -->
+</div>
+
+<div id="infotoggle">
+    <a id="info-button" class="info" title="Toggles info-Layer ON/OFF" href="#"> </a>
+</div>
+
+<div id="status">
+    <p><span>
+				count: 0<br />
+				timecode: 0
+			</span></p>
+</div>
+
+<div id="instructions">
+    <h1>Instructions</h1>
+    <p>This is an experiment in 3D stereoscopic visualization on two 2D Canvases... all hail HTML5</p>
+    <p>You can move around, look around and even change the focal length of the virtual stereoscopic camera</p>
+    <p>To move around you may use these keys:</p>
+    <img src="img/dummy.png" alt="moving with arrow buttons and R and F">
+    <p>To tilt the camera in any direction these keys might help:</p>
+    <img src="img/dummy.png" alt="tilting camera with W,A,S,D,Q,E">
+    <p>Last but not least, there's also a zoom control available with these:</p>
+    <img src="img/dummy.png" alt="zooming with T & G">
+</div>
+
+<script src="js/util.js"></script>
+<script src="js/3dcanvas.js"></script>
+<script src="js/ga.js"></script>
     <main id="root"/>
 </body>
 </html>
