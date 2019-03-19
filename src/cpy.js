@@ -19,9 +19,7 @@ var world3D = new function() {
 
     // The canvas and its 2D context
     var canvs;
-    var canvs2;
     var contxt;
-    var contxt2;
 
     // The initial state of the mouse
     var mouse = {
@@ -212,21 +210,15 @@ var world3D = new function() {
         // Resize the canvas
         canvs.width = world.width;
         canvs.height = world.height;
-        //canvs2.width = world.width;
-        //canvs2.height = world.height;
 
         // Determine the centered x/y position of the canvas
         var cvx = Math.round( (window.innerWidth ) - world.width - (window.innerWidth * 0.03) );
-        //var cvx2 = Math.round( (window.innerWidth / 2) + (window.innerWidth * 0.03) );
         var cvy = Math.round( (window.innerHeight / 2) - (world.height / 2) );
 
         // Move the canvas
         canvs.style.position = 'absolute';
         canvs.style.left = cvx +'px';
         canvs.style.top = cvy + 'px';
-        //canvs2.style.position = 'absolute';
-        //canvs2.style.left = cvx2 +'px';
-        //canvs2.style.top = cvy + 'px';
 
         // Adjust infoLayer
         ui.instructions.style.width = (world.width * 2) + 'px';
@@ -482,13 +474,6 @@ var world3D = new function() {
      */
     function loop() {
 
-        //contxt.fillStyle = "rgba(0,0,0,1)";
-        //contxt.fillRect( 0, 0, world.width, world.height );
-        //contxt2.fillStyle = "rgba(0,0,0,1)";
-        //contxt2.fillRect( 0, 0, world.width, world.height );
-        //contxt.clearRect( 0, 0, world.width, world.height );
-        //contxt2.clearRect( 0, 0, world.width, world.height );
-
         cam1.orientation.y = mouse.x / 1000;
         cam1.orientation.x = (mouse.y / 1000) * -1;
 
@@ -498,60 +483,46 @@ var world3D = new function() {
         }
         if ( key.up ) {
             cam1.move(initsize);
-            //cam2.move(initsize);
         }
         if ( key.down ) {
             cam1.move(-initsize);
-            //cam2.move(-initsize);
         }
         if ( key.left ) {
             cam1.pan(-initsize, 0);
-            //cam2.pan(-initsize, 0);
         }
         if ( key.right ) {
             cam1.pan(initsize, 0);
-            //cam2.pan(initsize, 0);
         }
         if ( key.r ) {
             cam1.pan(0, -initsize);
-            //cam2.pan(0, -initsize);
         }
         if ( key.f ) {
             cam1.pan(0, initsize);
-            //cam2.pan(0, initsize);
         }
 
         if ( key.w ) {
             cam1.orientation.x += 0.03;
-            //cam2.orientation.x += 0.03;
         }
         if ( key.a) {
             cam1.orientation.y -= 0.03;
-            //cam2.orientation.y -= 0.03;
         }
         if ( key.s ) {
             cam1.orientation.x -= 0.03;
-            //cam2.orientation.x -= 0.03;
         }
         if ( key.d) {
             cam1.orientation.y += 0.03;
-            //cam2.orientation.y += 0.03;
         }
         if ( key.q ) {
             cam1.orientation.z -= 0.03;
-            //cam2.orientation.z -= 0.03;
         }
         if ( key.e) {
             cam1.orientation.z += 0.03;
-            //cam2.orientation.z += 0.03;
         }
         if ( key.t ) {
             cam1.zoom += 0.05;
-            //cam2.zoom += 0.05;
         }
         if ( key.g) {
             cam1.zoom -= 0.05;
-            //cam2.zoom -= 0.05;
         }
 
 
@@ -560,8 +531,6 @@ var world3D = new function() {
             ui.statusContent.innerHTML = "ObjectCount: " + objectPool.length + "<br />TimeCode: " + TIME;
             ui.statusContent.innerHTML += "<br / >CAM1 x:" + cam1.position.x + " y:" + cam1.position.y + " z:" + cam1.position.z;
             ui.statusContent.innerHTML += " xo:" + cam1.orientation.x + " yo:" + cam1.orientation.y + " zo:" + cam1.orientation.z + " zoom:" + cam1.zoom;
-            //ui.statusContent.innerHTML += "<br / >CAM2 x:" + cam2.position.x + " y:" + cam2.position.y + " z:" + cam2.position.z;
-            //ui.statusContent.innerHTML += " xo:" + cam2.orientation.x + " yo:" + cam2.orientation.y + " zo:" + cam2.orientation.z + " zoom:" + cam2.zoom;
             ui.statusContent.innerHTML += "<br /> OBJ1 x:" + objectPool[1].position.x + " y:" + objectPool[1].position.y + " z:" + objectPool[1].position.z;
             ui.statusContent.innerHTML += "<br / >MOUSE x:" + mouse.x + " y:" + mouse.y;
         }
@@ -591,28 +560,14 @@ var world3D = new function() {
         });
         // render Queue
 
-        //contxt.fillStyle = "rgba(0,0,0,1)";
-        //contxt.fillRect( 0, 0, world.width, world.height );
         contxt.clearRect(0, 0, world.width, world.height);
-        //contxt.fillRect( 0, 0, world.width, world.height );
         for( var i = 0, len = renderPool.length; i < len; i++ ) {
             var object = renderPool[i];
             // Render Objects
             object.render( cam1, contxt,1 );
-            //object.render( cam2, contxt2, 2 );
         }
 
         renderPool = [];
-
-        // Reindex object Array
-        // Create new placeholder pool, fill with valids and overwrite pool
-        //var cleanPool = [];
-        //for (var i in objectPool) {
-        //  if( objectPool[i] ) {
-        //	cleanPool.push( objectPool[i] );
-        //  }
-        //}
-        //objectPool = cleanPool;
 
         TIME += 1;
     }
@@ -695,7 +650,6 @@ point.prototype.distanceTo = function(p) {
     var dy = p.y-this.position.y;
     var dz = p.z-this.position.z;
     return Math.sqrt((Math.pow(dx, 2)) + (Math.pow(dy, 2)) + (Math.pow(dz, 2)));
-    //return Math.sqrt((dx * dx) + (dy * dy) + (dz * dz));
 };
 point.prototype.rotate = function( x, y, z, xr, yr, zr) {
     // Displace to make rotation point 0,0,0
@@ -749,9 +703,6 @@ point.prototype.render = function( cam, cont, str ) {
     var screenCoords = this.getScreenCoords(cam);
     // Check distance to camera before rendering
     if (screenCoords.distance > 0) {
-        // Plot Square
-        //cont.fillStyle = 'rgba('+Math.round(255)+','+Math.round(255)+','+Math.round(255)+',1.0)';
-        //cont.fillRect( screenCoords.x-(str*2), screenCoords.y-(str*2), str*4, str*4 );
         // Draw Circle
         cont.beginPath();
         cont.arc( screenCoords.x, screenCoords.y, str*2, 0, Math.PI*2, true );
@@ -791,6 +742,5 @@ line.prototype.render = function( cam, cont, str ) {
         cont.stroke();
     }
 };
-
 
 world3D.initialize();
