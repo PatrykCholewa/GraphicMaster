@@ -15,8 +15,6 @@ var world3D = new function() {
     var FRAMERATE = 48;
     var TIME = 0;
 
-
-
     // The canvas and its 2D context
     var canvs;
     var contxt;
@@ -44,13 +42,6 @@ var world3D = new function() {
         f: false,
         t: false,
         g: false
-    };
-
-    // Contains settings that are saved and restored between sessions
-    var settings = {
-        infosOn: false,
-        statusOn: false,
-        rotationOn: false
     };
 
     // Holds all object instances
@@ -94,18 +85,6 @@ var world3D = new function() {
 
     // create camera  and set initial position
     var cam1 = new camera( -95, -604, -636, -0.6, 0.6, 0, 1.5, -2);
-
-    // creates ui element container object
-    var ui = {
-        infoToggle: null,
-        status: null,
-        statusContent: null,
-        instructions: null,
-        options: null,
-        rotationButton: null,
-        statusButton: null,
-        resetButton: null
-    };
 
 
     /**
@@ -416,16 +395,6 @@ var world3D = new function() {
             cam1.zoom -= 0.05;
         }
 
-
-        // update info-layer if visible
-        if (settings.statusOn) {
-            ui.statusContent.innerHTML = "ObjectCount: " + objectPool.length + "<br />TimeCode: " + TIME;
-            ui.statusContent.innerHTML += "<br / >CAM1 x:" + cam1.position.x + " y:" + cam1.position.y + " z:" + cam1.position.z;
-            ui.statusContent.innerHTML += " xo:" + cam1.orientation.x + " yo:" + cam1.orientation.y + " zo:" + cam1.orientation.z + " zoom:" + cam1.zoom;
-            ui.statusContent.innerHTML += "<br /> OBJ1 x:" + objectPool[1].position.x + " y:" + objectPool[1].position.y + " z:" + objectPool[1].position.z;
-            ui.statusContent.innerHTML += "<br / >MOUSE x:" + mouse.x + " y:" + mouse.y;
-        }
-
         var temp;
         // Alter object by object and determin renderqueue
         for( var i = 0, len = objectPool.length; i < len; i++ ) {
@@ -434,10 +403,6 @@ var world3D = new function() {
                 continue;
             }
 
-            // rotate 1st 20 objects if rotation is on
-            if (settings.rotationOn && i < 20) {
-                object.rotate(initsize*5, initsize*5, initsize*5, 0, (Math.PI*2)/FRAMERATE, 0);
-            }
             temp = object.getScreenCoords(cam1);
             if ( ( temp.x < -world.width ) || ( temp.y < -world.height ) || ( temp.x > world.width*2 ) || ( temp.y > world.height*2 ) || ( temp.distance < 0 ) ) {
                 // do nothing
