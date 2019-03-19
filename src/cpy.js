@@ -93,10 +93,7 @@ var world3D = new function() {
     var renderPool = [];
 
     // create camera  and set initial position
-    //var cam1 = new camera( (initsize*5), -initsize*5*j/3, -initsize*15, -0.6, 0.4, 0, 1.5, -5);
-    //var cam2 = new camera( (initsize*5), -initsize*5*j/3, -initsize*15, -0.6, 0.4, 0, 1.5, +5);
     var cam1 = new camera( -95, -604, -636, -0.6, 0.6, 0, 1.5, -2);
-    //var cam2 = new camera( -95, -604, -636, -0.6, 0.6, 0, 1.5, 2);
 
     // creates ui element container object
     var ui = {
@@ -118,20 +115,10 @@ var world3D = new function() {
 
         // Collect references to all DOM elements being used
         canvs = document.getElementById('world');
-        //canvs2 = document.getElementById('world2');
-        ui.infoToggle = document.getElementById('infotoggle');
-        ui.status = document.getElementById('status');
-        ui.statusContent = ui.status.getElementsByTagName( 'span' )[0];
-        ui.instructions = document.getElementById('instructions');
-        ui.options = document.getElementById('options');
-        ui.rotationButton = document.getElementById('rotation-button');
-        ui.statusButton = document.getElementById('status-button');
-        //ui.resetButton = document.getElementById('reset-button');
 
         // Make sure that the Canvas element is available before continuing
         if (canvs && canvs.getContext) {
             contxt = canvs.getContext('2d');
-            //contxt2 = canvs2.getContext('2d');
 
             // Register event listeners
             document.addEventListener('mousemove', documentMouseMoveHandler, false);
@@ -143,15 +130,6 @@ var world3D = new function() {
             document.addEventListener('keydown', documentKeyDownHandler, false);
             document.addEventListener('keyup', documentKeyUpHandler, false);
             window.addEventListener('resize', windowResizeHandler, false);
-            ui.infoToggle.addEventListener('click', infoToggleClickedHandler, false);
-            ui.rotationButton.addEventListener('click', rotationButtonClickedHandler, false);
-            ui.statusButton.addEventListener('click', statusButtonClickedHandler, false);
-            //ui.resetButton.addEventListener('click', resetButtonClickedHandler, false);
-
-            // Attempts to restore settings from saved data if there is any
-            restoreSettings();
-
-            updateUI();
 
             // Force an initial resize to make sure the UI is sized correctly
             windowResizeHandler();
@@ -161,44 +139,6 @@ var world3D = new function() {
 
         }
     };
-
-    /**
-     * Restores settings from local storage if there are any available
-     */
-    function restoreSettings() {
-    }
-
-    /**
-     * Pushes the current settings to local history.
-     */
-    function saveSettings() {
-    }
-
-    /**
-     * Function to update UI Elements
-     */
-    function updateUI() {
-        if( settings.infosOn ) {
-            ui.instructions.style.display = 'block';
-        }
-        else {
-            ui.instructions.style.display = 'none';
-        }
-        if( settings.statusOn ) {
-            ui.status.style.display = 'block';
-            ui.statusButton.setAttribute( "class", "switchOn" );
-        }
-        else {
-            ui.status.style.display = 'none';
-            ui.statusButton.setAttribute( "class", "switch" );
-        }
-        if( settings.rotationOn ) {
-            ui.rotationButton.setAttribute( "class", "switchOn" );
-        }
-        else {
-            ui.rotationButton.setAttribute( "class", "switch" );
-        }
-    }
 
     /**
      * Event handler for window.onresize.
@@ -219,55 +159,6 @@ var world3D = new function() {
         canvs.style.position = 'absolute';
         canvs.style.left = cvx +'px';
         canvs.style.top = cvy + 'px';
-
-        // Adjust infoLayer
-        ui.instructions.style.width = (world.width * 2) + 'px';
-    }
-    /**
-     * Event handler for Reset Button
-     * @param event
-     */
-    function resetButtonClickedHandler( event ) {
-        event.preventDefault();
-    }
-
-    /**
-     * Event handler for rotation Button
-     * @param event
-     */
-    function rotationButtonClickedHandler( event ) {
-        settings.rotationOn = !settings.rotationOn;
-
-        updateUI();
-        saveSettings();
-
-        event.preventDefault();
-    }
-
-    /**
-     * Event handler for status Button
-     * @param event
-     */
-    function statusButtonClickedHandler( event ) {
-        settings.statusOn = !settings.statusOn;
-
-        updateUI();
-        saveSettings();
-
-        event.preventDefault();
-    }
-
-    /**
-     * Event handler for info Button
-     * @param event
-     */
-    function infoToggleClickedHandler( event ) {
-        settings.infosOn = !settings.infosOn;
-
-        updateUI();
-        saveSettings();
-
-        event.preventDefault();
     }
 
     /**
