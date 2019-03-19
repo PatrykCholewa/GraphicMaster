@@ -1,3 +1,5 @@
+import Point from './Point';
+
 // The world dimensions, defaults to full screen
 var world = {
     x: 0,
@@ -12,7 +14,7 @@ var world = {
 var world3D = new function() {
 
     // The number of times the game will be redrawn per second
-    var FRAMERATE = 48;
+    var FRAMERATE = 100000;
     var TIME = 0;
 
     // The canvas and its 2D context
@@ -50,33 +52,33 @@ var world3D = new function() {
     // create some objects
     var initsize = 25;
     // cubeof dots
-    objectPool.push(new point( 0, 0, initsize*10 ));
-    objectPool.push(new point( 0, initsize*10, initsize*10 ));
-    objectPool.push(new point( initsize*10, initsize*10, initsize*10 ));
-    objectPool.push(new point( initsize*10, 0, initsize*10 ));
+    objectPool.push(new Point( 0, 0, initsize*10 ));
+    objectPool.push(new Point( 0, initsize*10, initsize*10 ));
+    objectPool.push(new Point( initsize*10, initsize*10, initsize*10 ));
+    objectPool.push(new Point( initsize*10, 0, initsize*10 ));
 
-    objectPool.push(new point( 0, 0, 0 ));
-    objectPool.push(new point( 0, initsize*10, 0));
-    objectPool.push(new point( initsize*10, initsize*10, 0 ));
-    objectPool.push(new point( initsize*10, 0, 0 ));
+    objectPool.push(new Point( 0, 0, 0 ));
+    objectPool.push(new Point( 0, initsize*10, 0));
+    objectPool.push(new Point( initsize*10, initsize*10, 0 ));
+    objectPool.push(new Point( initsize*10, 0, 0 ));
 
     // array of cubes
     for (var i=0; i<5; i++) {
         for (var j=0; j<5; j++) {
-            objectPool.push(new line( new point( 0+(initsize*20*i), 0, 0+(initsize*20*j) ), new point( 0+(initsize*20*i), 0, initsize*10+(initsize*20*j) ) ));
-            objectPool.push(new line( new point( 0+(initsize*20*i), 0, initsize*10+(initsize*20*j) ), new point( 0+(initsize*20*i), initsize*10, initsize*10+(initsize*20*j) ) ));
-            objectPool.push(new line( new point( 0+(initsize*20*i), initsize*10, initsize*10+(initsize*20*j) ), new point( 0+(initsize*20*i), initsize*10, 0+(initsize*20*j) ) ));
-            objectPool.push(new line( new point( 0+(initsize*20*i), initsize*10, 0+(initsize*20*j) ), new point( 0+(initsize*20*i), 0, 0+(initsize*20*j) ) ));
+            objectPool.push(new line( new Point( 0+(initsize*20*i), 0, 0+(initsize*20*j) ), new Point( 0+(initsize*20*i), 0, initsize*10+(initsize*20*j) ) ));
+            objectPool.push(new line( new Point( 0+(initsize*20*i), 0, initsize*10+(initsize*20*j) ), new Point( 0+(initsize*20*i), initsize*10, initsize*10+(initsize*20*j) ) ));
+            objectPool.push(new line( new Point( 0+(initsize*20*i), initsize*10, initsize*10+(initsize*20*j) ), new Point( 0+(initsize*20*i), initsize*10, 0+(initsize*20*j) ) ));
+            objectPool.push(new line( new Point( 0+(initsize*20*i), initsize*10, 0+(initsize*20*j) ), new Point( 0+(initsize*20*i), 0, 0+(initsize*20*j) ) ));
 
-            objectPool.push(new line( new point( initsize*10+(initsize*20*i), 0, 0+(initsize*20*j) ), new point( initsize*10+(initsize*20*i), 0, initsize*10+(initsize*20*j) ) ));
-            objectPool.push(new line( new point( initsize*10+(initsize*20*i), 0, initsize*10+(initsize*20*j) ), new point( initsize*10+(initsize*20*i), initsize*10, initsize*10+(initsize*20*j) ) ));
-            objectPool.push(new line( new point( initsize*10+(initsize*20*i), initsize*10, initsize*10+(initsize*20*j) ), new point( initsize*10+(initsize*20*i), initsize*10, 0+(initsize*20*j) ) ));
-            objectPool.push(new line( new point( initsize*10+(initsize*20*i), initsize*10, 0+(initsize*20*j) ), new point( initsize*10+(initsize*20*i), 0, 0+(initsize*20*j) ) ));
+            objectPool.push(new line( new Point( initsize*10+(initsize*20*i), 0, 0+(initsize*20*j) ), new Point( initsize*10+(initsize*20*i), 0, initsize*10+(initsize*20*j) ) ));
+            objectPool.push(new line( new Point( initsize*10+(initsize*20*i), 0, initsize*10+(initsize*20*j) ), new Point( initsize*10+(initsize*20*i), initsize*10, initsize*10+(initsize*20*j) ) ));
+            objectPool.push(new line( new Point( initsize*10+(initsize*20*i), initsize*10, initsize*10+(initsize*20*j) ), new Point( initsize*10+(initsize*20*i), initsize*10, 0+(initsize*20*j) ) ));
+            objectPool.push(new line( new Point( initsize*10+(initsize*20*i), initsize*10, 0+(initsize*20*j) ), new Point( initsize*10+(initsize*20*i), 0, 0+(initsize*20*j) ) ));
 
-            objectPool.push(new line( new point( 0+(initsize*20*i), 0, 0+(initsize*20*j) ), new point( initsize*10+(initsize*20*i), 0, 0+(initsize*20*j) ) ));
-            objectPool.push(new line( new point( 0+(initsize*20*i), 0, initsize*10+(initsize*20*j) ), new point( initsize*10+(initsize*20*i), 0, initsize*10+(initsize*20*j) ) ));
-            objectPool.push(new line( new point( 0+(initsize*20*i), initsize*10, initsize*10+(initsize*20*j) ), new point( initsize*10+(initsize*20*i), initsize*10, initsize*10+(initsize*20*j) ) ));
-            objectPool.push(new line( new point( 0+(initsize*20*i), initsize*10, 0+(initsize*20*j) ), new point( initsize*10+(initsize*20*i), initsize*10, 0+(initsize*20*j) ) ));
+            objectPool.push(new line( new Point( 0+(initsize*20*i), 0, 0+(initsize*20*j) ), new Point( initsize*10+(initsize*20*i), 0, 0+(initsize*20*j) ) ));
+            objectPool.push(new line( new Point( 0+(initsize*20*i), 0, initsize*10+(initsize*20*j) ), new Point( initsize*10+(initsize*20*i), 0, initsize*10+(initsize*20*j) ) ));
+            objectPool.push(new line( new Point( 0+(initsize*20*i), initsize*10, initsize*10+(initsize*20*j) ), new Point( initsize*10+(initsize*20*i), initsize*10, initsize*10+(initsize*20*j) ) ));
+            objectPool.push(new line( new Point( 0+(initsize*20*i), initsize*10, 0+(initsize*20*j) ), new Point( initsize*10+(initsize*20*i), initsize*10, 0+(initsize*20*j) ) ));
         };
     };
 
@@ -403,7 +405,7 @@ var world3D = new function() {
                 continue;
             }
 
-            temp = object.getScreenCoords(cam1);
+            temp = object.getScreenCoords(world, cam1);
             if ( ( temp.x < -world.width ) || ( temp.y < -world.height ) || ( temp.x > world.width*2 ) || ( temp.y > world.height*2 ) || ( temp.distance < 0 ) ) {
                 // do nothing
             } else {
@@ -420,7 +422,7 @@ var world3D = new function() {
         for( var i = 0, len = renderPool.length; i < len; i++ ) {
             var object = renderPool[i];
             // Render Objects
-            object.render( cam1, contxt,1 );
+            object.render(world, cam1, contxt,1 );
         }
 
         renderPool = [];
@@ -491,87 +493,10 @@ camera.prototype.pan = function( x, y ) {
     this.position.z += nz;
 };
 
-/**
- * Defines a 3D Point and basic operations.
- * @param x
- * @param y
- * @param z
- */
-function point( x, y, z ) {
-    this.position = { x: x || 0, y: y || 0, z: z || 0 };
-    this.tempIndex = 0;
-};
-point.prototype.distanceTo = function(p) {
-    var dx = p.x-this.position.x;
-    var dy = p.y-this.position.y;
-    var dz = p.z-this.position.z;
-    return Math.sqrt((Math.pow(dx, 2)) + (Math.pow(dy, 2)) + (Math.pow(dz, 2)));
-};
-point.prototype.rotate = function( x, y, z, xr, yr, zr) {
-    // Displace to make rotation point 0,0,0
-    var tx = this.position.x - x;
-    var ty = this.position.y - y;
-    var tz = this.position.z - z;
-    // Precalculates Sin & Cos for rotation angles
-    var cosx = Math.cos(xr);
-    var cosy = Math.cos(yr);
-    var cosz = Math.cos(zr);
-    var sinx = Math.sin(xr);
-    var siny = Math.sin(yr);
-    var sinz = Math.sin(zr);
-    // Rotate Coordinate
-    // http://en.wikipedia.org/wiki/3D_projection#Perspective_projection
-    var nx = ( cosy * ( sinz * ( ty ) + cosz * ( tx ) ) - siny * ( tz ) );
-    var ny = ( sinx * ( cosy * ( tz ) + siny * ( sinz * ( ty ) + cosz * ( tx ) ) ) + cosx * ( cosz * ( ty ) - sinz * ( tx ) ) );
-    var nz = ( cosx * ( cosy * ( tz ) + siny * ( sinz * ( ty ) + cosz * ( tx ) ) ) - sinx * ( cosz * ( ty ) - sinz * ( tx ) ) );
-    // Reassign new coordinates and displace back to match rotation point
-    this.position.x = nx + x;
-    this.position.y = ny + y;
-    this.position.z = nz + z;
-};
-point.prototype.getScreenCoords = function(c) {
-    // Displace to make rotation point 0,0,0
-    var tx = this.position.x - c.position.x;
-    var ty = this.position.y - c.position.y;
-    var tz = this.position.z - c.position.z;
-    // Precalculates Sin & Cos for rotation angles
-    var cosx = Math.cos(c.orientation.x);
-    var cosy = Math.cos(c.orientation.y);
-    var cosz = Math.cos(c.orientation.z);
-    var sinx = Math.sin(c.orientation.x);
-    var siny = Math.sin(c.orientation.y);
-    var sinz = Math.sin(c.orientation.z);
-    // Rotate Coordinate
-    // http://en.wikipedia.org/wiki/3D_projection#Perspective_projection
-    var nx = ( cosy * ( sinz * ( ty ) + cosz * ( tx ) ) - siny * ( tz ) );
-    var ny = ( sinx * ( cosy * ( tz ) + siny * ( sinz * ( ty ) + cosz * ( tx ) ) ) + cosx * ( cosz * ( ty ) - sinz * ( tx ) ) );
-    var nz = ( cosx * ( cosy * ( tz ) + siny * ( sinz * ( ty ) + cosz * ( tx ) ) ) - sinx * ( cosz * ( ty ) - sinz * ( tx ) ) );
-    // Return ScreenCoordinates and distance to viewing plane
-    this.tempIndex = nz;
-    return {
-        x : (((nx+c.stereo) * (c.zoom/nz)) * (world.height/2)) + (world.width/2),
-        y : (((ny+c.stereo) * (c.zoom/nz)) * (world.height/2)) + (world.height/2),
-        distance : nz
-    };
-};
-point.prototype.render = function( cam, cont, str ) {
-    // Get Screen Coordinates
-    var screenCoords = this.getScreenCoords(cam);
-    // Check distance to camera before rendering
-    if (screenCoords.distance > 0) {
-        // Draw Circle
-        cont.beginPath();
-        cont.arc( screenCoords.x, screenCoords.y, str*2, 0, Math.PI*2, true );
-        cont.strokeStyle = 'rgba('+255+','+255+','+255+',1.0)';
-        cont.lineWidth = 1;
-        cont.stroke();
-    }
-};
-
 function line( p1, p2 ) {
     this.points = new Array;
-    this.points[0] = p1 || new point( 0, 0, 0 );
-    this.points[1] = p2 || new point( 0, 0, 0 );
+    this.points[0] = p1 || new Point( 0, 0, 0 );
+    this.points[1] = p2 || new Point( 0, 0, 0 );
     this.tempIndex = 0;
 };
 line.prototype.rotate = function( x, y, z, xr, yr, zr) {
@@ -579,14 +504,14 @@ line.prototype.rotate = function( x, y, z, xr, yr, zr) {
         this.points[i].rotate( x, y, z, xr, yr, zr);
     };
 };
-line.prototype.getScreenCoords = function(c) {
-    var screenCoords = this.points[0].getScreenCoords(c);
+line.prototype.getScreenCoords = function(world, c) {
+    var screenCoords = this.points[0].getScreenCoords(world, c);
     this.tempIndex = this.points[0].tempIndex;
     return (screenCoords);
 };
-line.prototype.render = function( cam, cont, str ) {
-    var screenCoords = this.points[0].getScreenCoords(cam);
-    var screenCoords2 = this.points[1].getScreenCoords(cam);
+line.prototype.render = function(world, cam, cont, str ) {
+    var screenCoords = this.points[0].getScreenCoords(world, cam);
+    var screenCoords2 = this.points[1].getScreenCoords(world, cam);
     var distance = ((screenCoords.distance + screenCoords2.distance) / 2);
     var brightnes = Math.round((1 / (distance / 500) ) * 255);
     if (distance > 125) {

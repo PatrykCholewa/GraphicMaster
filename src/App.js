@@ -75,7 +75,7 @@ export default class App extends Component {
     render() {
         return (
             <div className="App">
-                <canvas id="display" ref={ctx => this._context = ctx.getContext('2d')}/>
+                {/*<canvas id="display" ref={ctx => this._context = ctx.getContext('2d')}/>*/}
                 {/*OBJECTS_TO_RENDER.map((length, idx) => this._lengthProjectionOnCamera(length, idx))*/}
             </div>
         );
