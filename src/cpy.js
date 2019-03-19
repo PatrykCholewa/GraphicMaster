@@ -1,39 +1,3 @@
-/**
- *
- */
-var UserProfile = {
-
-    /** */
-    UA_ANDROID: 'android',
-    UA_IPHONE: 'iphone',
-    UA_IPAD: 'ipad',
-
-    isOnline: navigator.onLine,
-
-    isAuthenticated: false,
-
-    /**
-     *
-     */
-    isTouchDevice: function() {
-        if (navigator.userAgent.toLowerCase().indexOf(this.UA_ANDROID) != -1 ||
-            navigator.userAgent.toLowerCase().indexOf(this.UA_IPHONE) != -1 ||
-            navigator.userAgent.toLowerCase().indexOf(this.UA_IPAD) != -1 ) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    },
-
-    /**
-     *
-     */
-    suportsLocalStorage: function() {
-        return ('localStorage' in window) && window['localStorage'] !== null;
-    }
-};
-
 // The world dimensions, defaults to full screen
 var world = {
     x: 0,
@@ -194,11 +158,6 @@ var world3D = new function() {
             // Force an initial resize to make sure the UI is sized correctly
             windowResizeHandler();
 
-            // If we are on a touch device, certain elements need to be configured differently
-            if( UserProfile.isTouchDevice() ) {
-                // TODO: Hide excess UI that does not work on small screens
-            }
-
             // Initiate the main render loop of the game
             setInterval( loop, 1000 / FRAMERATE );
 
@@ -209,32 +168,12 @@ var world3D = new function() {
      * Restores settings from local storage if there are any available
      */
     function restoreSettings() {
-        if( UserProfile.suportsLocalStorage() ) {
-            var infosOn = localStorage[ 'infosOn' ];
-            if( infosOn ) {
-                settings.infosOn = infosOn === 'true';
-            }
-            var statusOn = localStorage[ 'statusOn' ];
-            if( statusOn ) {
-                settings.statusOn = statusOn === 'true';
-            }
-            var rotationOn = localStorage[ 'rotationOn' ];
-            if( rotationOn ) {
-                settings.rotationOn = rotationOn === 'true';
-            }
-        }
-
     }
 
     /**
      * Pushes the current settings to local history.
      */
     function saveSettings() {
-        if( UserProfile.suportsLocalStorage() ) {
-            localStorage[ 'infosOn' ] = settings.infosOn;
-            localStorage[ 'statusOn' ] = settings.statusOn;
-            localStorage[ 'rotationOn' ] = settings.rotationOn;
-        }
     }
 
     /**
