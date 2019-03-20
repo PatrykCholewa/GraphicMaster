@@ -55,16 +55,13 @@ export default class Length {
     }
 
     render(world, cam, cont, str ) {
-        const screenCoords = this._points[0].getScreenCoords(world, cam);
-        const screenCoords2 = this._points[1].getScreenCoords(world, cam);
-        const distance = (screenCoords.distance + screenCoords2.distance) / 2;
-        const brightnes = Math.round((1 / (distance / 500) ) * 255);
+        const screenCoords = this._points.map(point => point.getScreenCoords(world, cam));
+        const distance = screenCoords.reduce((acc, coord) => acc + coord.distance, 0) / 2;
         if (distance > 125) {
             cont.beginPath();
-            cont.moveTo(screenCoords.x,screenCoords.y);
-            cont.lineTo(screenCoords2.x,screenCoords2.y);
+            cont.moveTo(screenCoords[0].x,screenCoords[0].y);
+            cont.lineTo(screenCoords[1].x,screenCoords[1].y);
             cont.lineWidth = str;
-            cont.strokeStyle = 'rgba('+brightnes+','+brightnes+','+brightnes+',1.0)';
             cont.stroke();
         }
     }
