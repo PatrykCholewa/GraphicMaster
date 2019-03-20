@@ -8,7 +8,6 @@ export default class Length {
             point0 || new Point( 0, 0, 0 ),
             point1 || new Point( 0, 0, 0 )
         ];
-        this._tempIndex = 0;
     }
 
     get 0() {
@@ -17,14 +16,6 @@ export default class Length {
 
     get 1() {
         return this._points[1];
-    }
-
-    get tempIndex() {
-        return this._tempIndex;
-    }
-
-    set tempIndex(ti) {
-        this._tempIndex = ti;
     }
 
     mapPoints(map) {
@@ -48,10 +39,7 @@ export default class Length {
     }
 
     getScreenCoords(world, c) {
-        const screenCoords = this._points[0].getScreenCoords(world, c);
-        this._tempIndex = this._points[0].tempIndex;
-
-        return screenCoords;
+        return this._points[0].getScreenCoords(world, c);
     }
 
     render(world, cam, cont, str ) {

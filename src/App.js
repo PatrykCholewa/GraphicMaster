@@ -70,15 +70,12 @@ export default class App extends Component {
         this._world.width = window.innerWidth * 0.9;
         this._world.height = window.innerHeight * 0.9;
 
-        // Resize the canvas
         this._canvas.width = this._world.width;
         this._canvas.height = this._world.height;
 
-        // Determine the centered x/y position of the canvas
         const cvx = Math.round((window.innerWidth) - this._world.width - (window.innerWidth * 0.03));
         const cvy = Math.round((window.innerHeight / 2) - (this._world.height / 2));
 
-        // Move the canvas
         this._canvas.style.position = 'absolute';
         this._canvas.style.left = cvx +'px';
         this._canvas.style.top = cvy + 'px';
