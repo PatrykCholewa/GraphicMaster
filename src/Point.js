@@ -44,19 +44,18 @@ export default class Point extends Vector {
         return new Point(vect[0], vect[1], vect[2]);
     }
 
-    _getRotateCoordinate(p, pr) {
+    static getRotateCoordinate(t, rotateAngle) {
         // Displace to make rotation point 0,0,0
-        const t = this.minus(p);
         // Precalculates Sin & Cos for rotation angles
-        const cos = pr.eleMap(val => Math.cos(val));
-        const sin = pr.eleMap(val => Math.sin(val));
+        const cos = rotateAngle.eleMap(val => Math.cos(val));
+        const sin = rotateAngle.eleMap(val => Math.sin(val));
         // Rotate Coordinate
         // http://en.wikipedia.org/wiki/3D_projection#Perspective_projection
-        return new Point([
+        return new Point(
             cos[1] * ( sin[2] * t[1] + cos[2] * t[0] ) - sin[1] * t[2],
             sin[0] * ( cos[1] * t[2] + sin[1] * ( sin[2] * t[1] + cos[2] * t[0] ) ) + cos[0] * ( cos[2] * t[1] - sin[2] * t[0] ),
             cos[0] * ( cos[1] * t[2] + sin[1] * ( sin[2] * t[1] + cos[2] * t[0] ) ) - sin[0] * ( cos[2] * t[1] - sin[2] * t[0] )
-        ]);
+        );
     }
 
     distanceTo(p) {
@@ -69,14 +68,14 @@ export default class Point extends Vector {
 
     rotate(p, pr) {
         // Reassign new coordinates and displace back to match rotation point
-        this.plus_(  this._getRotateCoordinate(p, pr));
+        this.plus_( Point.getRotateCoordinate(this.minus(p), pr) );
     }
 
     getScreenCoords(wld, c) {
         const cPosition = new Point(c.position.x, c.position.y, c.position.z);
         const cOrientation = new Point(c.orientation.x, c.orientation.y, c.orientation.z);
 
-        const n = this._getRotateCoordinate(cPosition, cOrientation);
+        const n = Point.getRotateCoordinate(this.minus(cPosition), cOrientation);
         // Return ScreenCoordinates and distance to viewing plane
         this._tempIndex = n[2];
         return {

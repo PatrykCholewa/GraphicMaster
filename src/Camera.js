@@ -43,37 +43,22 @@ export default class Camera {
 
     move( z ) {
         // Displace to make rotation point 0,0,0
-        const t = new Point([0, 0, z]);
-        // Precalculates Sin & Cos for rotation angles
-        const rotationAngle = new Point([-this._orientation.x, -this._orientation.y, 0]);
-        const cos = rotationAngle.eleMap(val => Math.cos(val));
-        const sin = rotationAngle.eleMap(val => Math.sin(val));
-        // Rotate Coordinate
-        // http://en.wikipedia.org/wiki/3D_projection#Perspective_projection
-        const n = new Point(
-            cos.y * ( sin.z * t.z + cos.z * t.x ) - sin.y * t.z,
-            sin.x * ( cos.y * t.z + sin.y * ( sin.y * t.y + cos.z * t.x ) ) + cos.x * ( cos.z * t.y - sin.z * t.x ),
-            cos.x * ( cos.y * t.z + sin.y * ( sin.z * t.y + cos.z * t.x ) ) - sin.x * ( cos.z * t.y - sin.z * t.x )
+        const t = new Point(0, 0, z);
 
-        );
+        const rotationAngle = new Point(-this._orientation.x, -this._orientation.y, 0);
+        const n = Point.getRotateCoordinate(t, rotationAngle);
+
         // Reassign new coordinates and displace back to match rotation point
         this._position.plus_(n);
     }
 
     pan( x, y ) {
         // Displace to make rotation point 0,0,0
-        const t = new Point([x, y, 0]);
-        // Precalculates Sin & Cos for rotation angles
-        const rotationPoint = new Point([0, -this._orientation.y, -this._orientation.z]);
-        const cos = rotationPoint.eleMap(val => Math.cos(val));
-        const sin = rotationPoint.eleMap(val => Math.sin(val));
-        // Rotate Coordinate
-        // http://en.wikipedia.org/wiki/3D_projection#Perspective_projection
-        const n = new Point(
-            cos.y * ( sin.z * t.y + cos.z * t.x ) - sin.y * t.z,
-            sin.x * ( cos.y * t.z + sin.y * ( sin.z * t.y + cos.z * t.x ) ) + cos.x * ( cos.z * t.y - sin.z * t.x ),
-            cos.x * ( cos.y * t.z + sin.y * ( sin.z * t.y + cos.z * t.x ) ) - sin.x * ( cos.z * t.y - sin.z * t.x )
-        );
+        const t = new Point(x, y, 0);
+
+        const rotationPoint = new Point(0, -this._orientation.y, -this._orientation.z);
+        const n = Point.getRotateCoordinate(t, rotationPoint);
+
         // Reassign new coordinates and displace back to match rotation point
         this._position.plus_(n);
     };
