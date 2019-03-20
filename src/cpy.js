@@ -1,6 +1,6 @@
 import Point from './Point';
-import Length from "./Length";
 import Camera from "./Camera";
+import OBJECTS_TO_RENDER from "./objects";
 
 // The world dimensions, defaults to full screen
 const world = {
@@ -13,22 +13,21 @@ const world = {
 const world3D = new function() {
 
     // The number of times the game will be redrawn per second
-    var FRAMERATE = 20;
-    var TIME = 0;
+    const FRAMERATE = 20;
 
     // The canvas and its 2D context
-    var canvs;
-    var contxt;
+    let CANVAS;
+    let CONTEXT;
 
     // The initial state of the mouse
-    var mouse = {
+    const MOUSE = {
         x: 0,
         y: 0,
         down: false
     };
 
     // The initial state of the keyboard
-    var key = {
+    const key = {
         up: false,
         down: false,
         left: false,
@@ -45,84 +44,13 @@ const world3D = new function() {
         g: false
     };
 
-    // Holds all object instances
-    var objectPool = [];
-
-    // create some objects
-    const initSize = 25;
-    // cubeof dots
-    objectPool.push(new Point( 0, 0, initSize*10 ));
-    objectPool.push(new Point( 0, initSize*10, initSize*10 ));
-    objectPool.push(new Point( initSize*10, initSize*10, initSize*10 ));
-    objectPool.push(new Point( initSize*10, 0, initSize*10 ));
-
-    objectPool.push(new Point( 0, 0, 0 ));
-    objectPool.push(new Point( 0, initSize*10, 0));
-    objectPool.push(new Point( initSize*10, initSize*10, 0 ));
-    objectPool.push(new Point( initSize*10, 0, 0 ));
-
-    // array of cubes
-    for (let i = 0; i < 5; i++) {
-        for (let j = 0; j < 5; j++) {
-            objectPool.push(new Length(
-                new Point( initSize * 20 * i, 0, initSize * 20 * j ),
-                new Point( initSize * 20 * i, 0, initSize * 10 + initSize * 20 * j )
-            ));
-            objectPool.push(new Length(
-                new Point( initSize * 20 * i, 0, initSize * 10 + initSize * 20 * j ),
-                new Point( initSize * 20 * i, initSize * 10 , initSize * 10 + initSize * 20 * j )
-            ));
-            objectPool.push(new Length(
-                new Point( initSize * 20 * i, initSize * 10, initSize * 10 + initSize * 20 * j ),
-                new Point( initSize * 20 * i, initSize * 10, initSize * 20 * j )
-            ));
-            objectPool.push(new Length(
-                new Point( initSize * 20 * i, initSize * 10, initSize * 20 * j ),
-                new Point( initSize * 20 * i, 0, initSize * 20 * j )
-            ));
-
-            objectPool.push(new Length(
-                new Point( initSize * 10 + initSize * 20 * i, 0, initSize * 20 * j ),
-                new Point( initSize * 10 + initSize * 20 * i, 0, initSize * 10 + initSize * 20 * j )
-            ));
-            objectPool.push(new Length(
-                new Point( initSize * 10 + initSize * 20 * i, 0, initSize * 10 + initSize * 20 * j ),
-                new Point( initSize * 10 + initSize * 20 * i, initSize * 10, initSize * 10 + initSize * 20 * j )
-            ));
-            objectPool.push(new Length(
-                new Point( initSize * 10 + initSize * 20 * i, initSize * 10, initSize * 10 + initSize * 20 * j ),
-                new Point( initSize * 10 + initSize * 20 * i, initSize * 10, initSize * 20 * j )
-            ));
-            objectPool.push(new Length(
-                new Point( initSize * 10 + initSize * 20 * i, initSize * 10, initSize * 20 * j ),
-                new Point( initSize * 10 + initSize * 20 * i, 0, initSize * 20 * j )
-            ));
-
-            objectPool.push(new Length(
-                new Point( initSize * 20 * i, 0, initSize * 20 * j ),
-                new Point( initSize * 10 + initSize * 20 * i, 0, initSize * 20 * j )
-            ));
-            objectPool.push(new Length(
-                new Point( initSize * 20 * i, 0, initSize * 10 + initSize * 20 * j ),
-                new Point( initSize * 10 + initSize * 20 * i, 0, initSize * 10 + initSize * 20 * j )
-            ));
-            objectPool.push(new Length(
-                new Point( initSize * 20 * i, initSize * 10, initSize * 10 + initSize * 20 * j ),
-                new Point( initSize * 10 + initSize * 20 * i, initSize * 10, initSize * 10 + initSize * 20 * j )
-            ));
-            objectPool.push(new Length(
-                new Point( initSize * 20 * i, initSize * 10, initSize * 20 * j ),
-                new Point( initSize * 10 + initSize * 20 * i, initSize * 10, initSize * 20 * j )
-            ));
-        }
-    }
+    const INIT_SIZE = 25;
 
     // container for rendering queue
-    var renderPool = [];
+    let renderPool = [];
 
     // create camera  and set initial position
-    var cam = new Camera( new Point(-95, -604, -636), new Point(-0.6, 0.6, 0), 1.5, -2);
-
+    const CAMERA = new Camera(new Point(-95, -604, -636), new Point(-0.6, 0.6, 0), 1.5, -2);
 
     /**
      * Initializes the world and starts rendering loop.
@@ -130,17 +58,17 @@ const world3D = new function() {
     this.initialize = function(){
 
         // Collect references to all DOM elements being used
-        canvs = document.getElementById('world');
+        CANVAS = document.getElementById('world');
 
         // Make sure that the Canvas element is available before continuing
-        if (canvs && canvs.getContext) {
-            contxt = canvs.getContext('2d');
+        if (CANVAS && CANVAS.getContext) {
+            CONTEXT = CANVAS.getContext('2d');
 
             // Register event listeners
             document.addEventListener('mousemove', documentMouseMoveHandler, false);
-            canvs.addEventListener('mousedown', documentMouseDownHandler, false);
+            CANVAS.addEventListener('mousedown', documentMouseDownHandler, false);
             document.addEventListener('mouseup', documentMouseUpHandler, false);
-            canvs.addEventListener('touchstart', documentTouchStartHandler, false);
+            CANVAS.addEventListener('touchstart', documentTouchStartHandler, false);
             document.addEventListener('touchmove', documentTouchMoveHandler, false);
             document.addEventListener('touchend', documentTouchEndHandler, false);
             document.addEventListener('keydown', documentKeyDownHandler, false);
@@ -164,17 +92,17 @@ const world3D = new function() {
         world.height = window.innerHeight * 0.9;
 
         // Resize the canvas
-        canvs.width = world.width;
-        canvs.height = world.height;
+        CANVAS.width = world.width;
+        CANVAS.height = world.height;
 
         // Determine the centered x/y position of the canvas
-        var cvx = Math.round( (window.innerWidth ) - world.width - (window.innerWidth * 0.03) );
-        var cvy = Math.round( (window.innerHeight / 2) - (world.height / 2) );
+        const cvx = Math.round((window.innerWidth) - world.width - (window.innerWidth * 0.03));
+        const cvy = Math.round((window.innerHeight / 2) - (world.height / 2));
 
         // Move the canvas
-        canvs.style.position = 'absolute';
-        canvs.style.left = cvx +'px';
-        canvs.style.top = cvy + 'px';
+        CANVAS.style.position = 'absolute';
+        CANVAS.style.left = cvx +'px';
+        CANVAS.style.top = cvy + 'px';
     }
 
     /**
@@ -314,8 +242,8 @@ const world3D = new function() {
      * @param event
      */
     function documentMouseMoveHandler(event){
-        mouse.x = event.clientX - (window.innerWidth - world.width) * 0.5;
-        mouse.y = event.clientY - (window.innerHeight - world.height) * 0.5;
+        MOUSE.x = event.clientX - (window.innerWidth - world.width) * 0.5;
+        MOUSE.y = event.clientY - (window.innerHeight - world.height) * 0.5;
     }
 
     /**
@@ -323,10 +251,10 @@ const world3D = new function() {
      * @param event
      */
     function documentMouseDownHandler(event){
-        mouse.down = true;
+        MOUSE.down = true;
 
-        mouse.x = event.clientX - (window.innerWidth - world.width) * 0.5;
-        mouse.y = event.clientY - (window.innerHeight - world.height) * 0.5;
+        MOUSE.x = event.clientX - (window.innerWidth - world.width) * 0.5;
+        MOUSE.y = event.clientY - (window.innerHeight - world.height) * 0.5;
     }
 
     /**
@@ -334,10 +262,10 @@ const world3D = new function() {
      * @param event
      */
     function documentMouseUpHandler(event) {
-        mouse.down = false;
+        MOUSE.down = false;
 
-        mouse.x = event.clientX - (window.innerWidth - world.width) * 0.5;
-        mouse.y = event.clientY - (window.innerHeight - world.height) * 0.5;
+        MOUSE.x = event.clientX - (window.innerWidth - world.width) * 0.5;
+        MOUSE.y = event.clientY - (window.innerHeight - world.height) * 0.5;
     }
 
     /**
@@ -348,10 +276,10 @@ const world3D = new function() {
         if(event.touches.length === 1) {
             event.preventDefault();
 
-            mouse.x = event.touches[0].pageX - (window.innerWidth - world.width) * 0.5;
-            mouse.y = event.touches[0].pageY - (window.innerHeight - world.height) * 0.5;
+            MOUSE.x = event.touches[0].pageX - (window.innerWidth - world.width) * 0.5;
+            MOUSE.y = event.touches[0].pageY - (window.innerHeight - world.height) * 0.5;
 
-            mouse.down = true;
+            MOUSE.down = true;
         }
     }
 
@@ -363,8 +291,8 @@ const world3D = new function() {
         if(event.touches.length === 1) {
             event.preventDefault();
 
-            mouse.x = event.touches[0].pageX - (window.innerWidth - world.width) * 0.5;
-            mouse.y = event.touches[0].pageY - (window.innerHeight - world.height) * 0.5;
+            MOUSE.x = event.touches[0].pageX - (window.innerWidth - world.width) * 0.5;
+            MOUSE.y = event.touches[0].pageY - (window.innerHeight - world.height) * 0.5;
         }
     }
 
@@ -373,7 +301,7 @@ const world3D = new function() {
      * @param event
      */
     function documentTouchEndHandler(event) {
-        mouse.down = false;
+        MOUSE.down = false;
     }
 
 
@@ -383,88 +311,73 @@ const world3D = new function() {
      */
     function loop() {
 
-        cam.orientation.y = mouse.x / 1000;
-        cam.orientation.x = (mouse.y / 1000) * -1;
+        CAMERA.orientation.y = MOUSE.x / 1000;
+        CAMERA.orientation.x = (MOUSE.y / 1000) * -1;
 
         //check for user interaction
-        if ( mouse.down ) {
+        if ( MOUSE.down ) {
             //nothing
         }
         if ( key.up ) {
-            cam.move(initSize);
+            CAMERA.move(INIT_SIZE);
         }
         if ( key.down ) {
-            cam.move(-initSize);
+            CAMERA.move(-INIT_SIZE);
         }
         if ( key.left ) {
-            cam.pan(-initSize, 0);
+            CAMERA.pan(-INIT_SIZE, 0);
         }
         if ( key.right ) {
-            cam.pan(initSize, 0);
+            CAMERA.pan(INIT_SIZE, 0);
         }
         if ( key.r ) {
-            cam.pan(0, -initSize);
+            CAMERA.pan(0, -INIT_SIZE);
         }
         if ( key.f ) {
-            cam.pan(0, initSize);
+            CAMERA.pan(0, INIT_SIZE);
         }
 
         if ( key.w ) {
-            cam.orientation.x += 0.03;
+            CAMERA.orientation.x += 0.03;
         }
         if ( key.a) {
-            cam.orientation.y -= 0.03;
+            CAMERA.orientation.y -= 0.03;
         }
         if ( key.s ) {
-            cam.orientation.x -= 0.03;
+            CAMERA.orientation.x -= 0.03;
         }
         if ( key.d) {
-            cam.orientation.y += 0.03;
+            CAMERA.orientation.y += 0.03;
         }
         if ( key.q ) {
-            cam.orientation.z -= 0.03;
+            CAMERA.orientation.z -= 0.03;
         }
         if ( key.e) {
-            cam.orientation.z += 0.03;
+            CAMERA.orientation.z += 0.03;
         }
         if ( key.t ) {
-            cam.zoom += 0.05;
+            CAMERA.zoom += 0.05;
         }
         if ( key.g) {
-            cam.zoom -= 0.05;
+            CAMERA.zoom -= 0.05;
         }
 
-        var temp;
         // Alter object by object and determin renderqueue
-        for( var i = 0, len = objectPool.length; i < len; i++ ) {
-            var object = objectPool[i];
-            if (typeof object === 'undefined') {
-                continue;
-            }
-
-            temp = object.getScreenCoords(world, cam);
-            if ( ( temp.x < -world.width ) || ( temp.y < -world.height ) || ( temp.x > world.width*2 ) || ( temp.y > world.height*2 ) || ( temp.distance < 0 ) ) {
-                // do nothing
-            } else {
+        OBJECTS_TO_RENDER.forEach(object => {
+            const temp = object.getScreenCoords(world, CAMERA);
+            if ( !( temp.x < -world.width ) || ( temp.y < -world.height ) || ( temp.x > world.width*2 ) || ( temp.y > world.height*2 ) || ( temp.distance < 0 ) ) {
                 renderPool.push(object);
             }
-        }
-        // sort render Queue
-        renderPool.sort(function(a, b){
-            return b.tempIndex-a.tempIndex;
         });
-        // render Queue
 
-        contxt.clearRect(0, 0, world.width, world.height);
-        for( var i = 0, len = renderPool.length; i < len; i++ ) {
-            var object = renderPool[i];
-            // Render Objects
-            object.render(world, cam, contxt,1 );
-        }
+        // sort render Queue
+        renderPool.sort((a, b) => b.tempIndex - a.tempIndex);
+
+        // render Queue
+        CONTEXT.clearRect(0, 0, world.width, world.height);
+        renderPool.forEach(object => object.render(world, CAMERA, CONTEXT,1 ));
 
         renderPool = [];
-
-        TIME += 1;
     }
 };
 
