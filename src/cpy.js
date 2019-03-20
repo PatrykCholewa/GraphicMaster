@@ -1,16 +1,17 @@
 import Point from './Point';
 import Camera from "./Camera";
 import OBJECTS_TO_RENDER from "./objects";
+import REVERSE_KEY_MAP from "./util";
 
 // The world dimensions, defaults to full screen
-const world = {
+const WORLD = {
     x: 0,
     y: 0,
     width: 100,
     height: 100
 };
 
-const world3D = new function() {
+const World3D = new function() {
 
     // The number of times the game will be redrawn per second
     const FRAMERATE = 20;
@@ -27,21 +28,21 @@ const world3D = new function() {
     };
 
     // The initial state of the keyboard
-    const key = {
-        up: false,
-        down: false,
-        left: false,
-        right: false,
-        w: false,
-        a: false,
-        s: false,
-        d: false,
-        q: false,
-        e: false,
-        r: false,
-        f: false,
-        t: false,
-        g: false
+    const KEY_ACTIVATION = {
+        UP: false,
+        DOWN: false,
+        LEFT: false,
+        RIGHT: false,
+        W: false,
+        A: false,
+        S: false,
+        D: false,
+        Q: false,
+        E: false,
+        R: false,
+        F: false,
+        T: false,
+        G: false
     };
 
     const INIT_SIZE = 25;
@@ -55,7 +56,7 @@ const world3D = new function() {
     /**
      * Initializes the world and starts rendering loop.
      */
-    this.initialize = function(){
+    this.initialize = () => {
 
         // Collect references to all DOM elements being used
         CANVAS = document.getElementById('world');
@@ -87,163 +88,51 @@ const world3D = new function() {
     /**
      * Event handler for window.onresize.
      */
-    function windowResizeHandler() {
-        world.width = window.innerWidth * 0.9;
-        world.height = window.innerHeight * 0.9;
+    const windowResizeHandler = () => {
+        WORLD.width = window.innerWidth * 0.9;
+        WORLD.height = window.innerHeight * 0.9;
 
         // Resize the canvas
-        CANVAS.width = world.width;
-        CANVAS.height = world.height;
+        CANVAS.width = WORLD.width;
+        CANVAS.height = WORLD.height;
 
         // Determine the centered x/y position of the canvas
-        const cvx = Math.round((window.innerWidth) - world.width - (window.innerWidth * 0.03));
-        const cvy = Math.round((window.innerHeight / 2) - (world.height / 2));
+        const cvx = Math.round((window.innerWidth) - WORLD.width - (window.innerWidth * 0.03));
+        const cvy = Math.round((window.innerHeight / 2) - (WORLD.height / 2));
 
         // Move the canvas
         CANVAS.style.position = 'absolute';
         CANVAS.style.left = cvx +'px';
         CANVAS.style.top = cvy + 'px';
-    }
+    };
 
     /**
      * Event handler for SPACE DOWN key
      * @param event
      */
-    function documentKeyDownHandler(event) {
-        switch( event.which ) {
-            case 38:
-                key.up = true;
-                event.preventDefault();
-                break;
-            case 40:
-                key.down = true;
-                event.preventDefault();
-                break;
-            case 37:
-                key.left = true;
-                event.preventDefault();
-                break;
-            case 39:
-                key.right = true;
-                event.preventDefault();
-                break;
-            case 87:
-                key.w = true;
-                event.preventDefault();
-                break;
-            case 65:
-                key.a = true;
-                event.preventDefault();
-                break;
-            case 83:
-                key.s = true;
-                event.preventDefault();
-                break;
-            case 68:
-                key.d = true;
-                event.preventDefault();
-                break;
-            case 81:
-                key.q = true;
-                event.preventDefault();
-                break;
-            case 69:
-                key.e = true;
-                event.preventDefault();
-                break;
-            case 82:
-                key.r = true;
-                event.preventDefault();
-                break;
-            case 70:
-                key.f = true;
-                event.preventDefault();
-                break;
-            case 84:
-                key.t = true;
-                event.preventDefault();
-                break;
-            case 71:
-                key.g = true;
-                event.preventDefault();
-                break;
-            default:
-        }
-    }
+    const documentKeyDownHandler = event => {
+        const keyName = REVERSE_KEY_MAP[event.which];
+        event.preventDefault();
+        KEY_ACTIVATION[keyName] = true;
+    };
 
     /**
      * Event handler for SPACE UP key
      * @param event
      */
-    function documentKeyUpHandler(event) {
-        switch( event.which ) {
-            case 38:
-                key.up = false;
-                event.preventDefault();
-                break;
-            case 40:
-                key.down = false;
-                event.preventDefault();
-                break;
-            case 37:
-                key.left = false;
-                event.preventDefault();
-                break;
-            case 39:
-                key.right = false;
-                event.preventDefault();
-                break;
-            case 87:
-                key.w = false;
-                event.preventDefault();
-                break;
-            case 65:
-                key.a = false;
-                event.preventDefault();
-                break;
-            case 83:
-                key.s = false;
-                event.preventDefault();
-                break;
-            case 68:
-                key.d = false;
-                event.preventDefault();
-                break;
-            case 81:
-                key.q = false;
-                event.preventDefault();
-                break;
-            case 69:
-                key.e = false;
-                event.preventDefault();
-                break;
-            case 82:
-                key.r = false;
-                event.preventDefault();
-                break;
-            case 70:
-                key.f = false;
-                event.preventDefault();
-                break;
-            case 84:
-                key.t = false;
-                event.preventDefault();
-                break;
-            case 71:
-                key.g = false;
-                event.preventDefault();
-                break;
-            default:
-        }
-    }
+    const documentKeyUpHandler = event => {
+        const keyName = REVERSE_KEY_MAP[event.which];
+        event.preventDefault();
+        KEY_ACTIVATION[keyName] = false;
+    };
 
     /**
      * Event handler for document.onmousemove.
      * @param event
      */
     function documentMouseMoveHandler(event){
-        MOUSE.x = event.clientX - (window.innerWidth - world.width) * 0.5;
-        MOUSE.y = event.clientY - (window.innerHeight - world.height) * 0.5;
+        MOUSE.x = event.clientX - (window.innerWidth - WORLD.width) * 0.5;
+        MOUSE.y = event.clientY - (window.innerHeight - WORLD.height) * 0.5;
     }
 
     /**
@@ -253,8 +142,8 @@ const world3D = new function() {
     function documentMouseDownHandler(event){
         MOUSE.down = true;
 
-        MOUSE.x = event.clientX - (window.innerWidth - world.width) * 0.5;
-        MOUSE.y = event.clientY - (window.innerHeight - world.height) * 0.5;
+        MOUSE.x = event.clientX - (window.innerWidth - WORLD.width) * 0.5;
+        MOUSE.y = event.clientY - (window.innerHeight - WORLD.height) * 0.5;
     }
 
     /**
@@ -264,8 +153,8 @@ const world3D = new function() {
     function documentMouseUpHandler(event) {
         MOUSE.down = false;
 
-        MOUSE.x = event.clientX - (window.innerWidth - world.width) * 0.5;
-        MOUSE.y = event.clientY - (window.innerHeight - world.height) * 0.5;
+        MOUSE.x = event.clientX - (window.innerWidth - WORLD.width) * 0.5;
+        MOUSE.y = event.clientY - (window.innerHeight - WORLD.height) * 0.5;
     }
 
     /**
@@ -276,8 +165,8 @@ const world3D = new function() {
         if(event.touches.length === 1) {
             event.preventDefault();
 
-            MOUSE.x = event.touches[0].pageX - (window.innerWidth - world.width) * 0.5;
-            MOUSE.y = event.touches[0].pageY - (window.innerHeight - world.height) * 0.5;
+            MOUSE.x = event.touches[0].pageX - (window.innerWidth - WORLD.width) * 0.5;
+            MOUSE.y = event.touches[0].pageY - (window.innerHeight - WORLD.height) * 0.5;
 
             MOUSE.down = true;
         }
@@ -291,8 +180,8 @@ const world3D = new function() {
         if(event.touches.length === 1) {
             event.preventDefault();
 
-            MOUSE.x = event.touches[0].pageX - (window.innerWidth - world.width) * 0.5;
-            MOUSE.y = event.touches[0].pageY - (window.innerHeight - world.height) * 0.5;
+            MOUSE.x = event.touches[0].pageX - (window.innerWidth - WORLD.width) * 0.5;
+            MOUSE.y = event.touches[0].pageY - (window.innerHeight - WORLD.height) * 0.5;
         }
     }
 
@@ -318,54 +207,54 @@ const world3D = new function() {
         if ( MOUSE.down ) {
             //nothing
         }
-        if ( key.up ) {
+        if ( KEY_ACTIVATION.UP ) {
             CAMERA.move(INIT_SIZE);
         }
-        if ( key.down ) {
+        if ( KEY_ACTIVATION.DOWN ) {
             CAMERA.move(-INIT_SIZE);
         }
-        if ( key.left ) {
+        if ( KEY_ACTIVATION.LEFT ) {
             CAMERA.pan(-INIT_SIZE, 0);
         }
-        if ( key.right ) {
+        if ( KEY_ACTIVATION.RIGHT ) {
             CAMERA.pan(INIT_SIZE, 0);
         }
-        if ( key.r ) {
+        if ( KEY_ACTIVATION.R ) {
             CAMERA.pan(0, -INIT_SIZE);
         }
-        if ( key.f ) {
+        if ( KEY_ACTIVATION.F ) {
             CAMERA.pan(0, INIT_SIZE);
         }
 
-        if ( key.w ) {
+        if ( KEY_ACTIVATION.W ) {
             CAMERA.orientation.x += 0.03;
         }
-        if ( key.a) {
+        if ( KEY_ACTIVATION.A) {
             CAMERA.orientation.y -= 0.03;
         }
-        if ( key.s ) {
+        if ( KEY_ACTIVATION.S ) {
             CAMERA.orientation.x -= 0.03;
         }
-        if ( key.d) {
+        if ( KEY_ACTIVATION.D) {
             CAMERA.orientation.y += 0.03;
         }
-        if ( key.q ) {
+        if ( KEY_ACTIVATION.Q ) {
             CAMERA.orientation.z -= 0.03;
         }
-        if ( key.e) {
+        if ( KEY_ACTIVATION.E) {
             CAMERA.orientation.z += 0.03;
         }
-        if ( key.t ) {
+        if ( KEY_ACTIVATION.T ) {
             CAMERA.zoom += 0.05;
         }
-        if ( key.g) {
+        if ( KEY_ACTIVATION.G) {
             CAMERA.zoom -= 0.05;
         }
 
         // Alter object by object and determin renderqueue
         OBJECTS_TO_RENDER.forEach(object => {
-            const temp = object.getScreenCoords(world, CAMERA);
-            if ( !( temp.x < -world.width ) || ( temp.y < -world.height ) || ( temp.x > world.width*2 ) || ( temp.y > world.height*2 ) || ( temp.distance < 0 ) ) {
+            const temp = object.getScreenCoords(WORLD, CAMERA);
+            if ( !( temp.x < -WORLD.width ) || ( temp.y < -WORLD.height ) || ( temp.x > WORLD.width*2 ) || ( temp.y > WORLD.height*2 ) || ( temp.distance < 0 ) ) {
                 renderPool.push(object);
             }
         });
@@ -374,11 +263,11 @@ const world3D = new function() {
         renderPool.sort((a, b) => b.tempIndex - a.tempIndex);
 
         // render Queue
-        CONTEXT.clearRect(0, 0, world.width, world.height);
-        renderPool.forEach(object => object.render(world, CAMERA, CONTEXT,1 ));
+        CONTEXT.clearRect(0, 0, WORLD.width, WORLD.height);
+        renderPool.forEach(object => object.render(WORLD, CAMERA, CONTEXT,1 ));
 
         renderPool = [];
     }
 };
 
-world3D.initialize();
+World3D.initialize();
