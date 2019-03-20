@@ -20,13 +20,6 @@ const World3D = new function() {
     let CANVAS;
     let CONTEXT;
 
-    // The initial state of the mouse
-    const MOUSE = {
-        x: 0,
-        y: 0,
-        down: false
-    };
-
     // The initial state of the keyboard
     const KEY_ACTIVATION = {
         UP: false,
@@ -66,12 +59,6 @@ const World3D = new function() {
             CONTEXT = CANVAS.getContext('2d');
 
             // Register event listeners
-            document.addEventListener('mousemove', documentMouseMoveHandler, false);
-            CANVAS.addEventListener('mousedown', documentMouseDownHandler, false);
-            document.addEventListener('mouseup', documentMouseUpHandler, false);
-            CANVAS.addEventListener('touchstart', documentTouchStartHandler, false);
-            document.addEventListener('touchmove', documentTouchMoveHandler, false);
-            document.addEventListener('touchend', documentTouchEndHandler, false);
             document.addEventListener('keydown', documentKeyDownHandler, false);
             document.addEventListener('keyup', documentKeyUpHandler, false);
             window.addEventListener('resize', windowResizeHandler, false);
@@ -127,86 +114,9 @@ const World3D = new function() {
     };
 
     /**
-     * Event handler for document.onmousemove.
-     * @param event
-     */
-    function documentMouseMoveHandler(event){
-        MOUSE.x = event.clientX - (window.innerWidth - WORLD.width) * 0.5;
-        MOUSE.y = event.clientY - (window.innerHeight - WORLD.height) * 0.5;
-    }
-
-    /**
-     * Event handler for document.onmousedown.
-     * @param event
-     */
-    function documentMouseDownHandler(event){
-        MOUSE.down = true;
-
-        MOUSE.x = event.clientX - (window.innerWidth - WORLD.width) * 0.5;
-        MOUSE.y = event.clientY - (window.innerHeight - WORLD.height) * 0.5;
-    }
-
-    /**
-     * Event handler for document.onmouseup.
-     * @param event
-     */
-    function documentMouseUpHandler(event) {
-        MOUSE.down = false;
-
-        MOUSE.x = event.clientX - (window.innerWidth - WORLD.width) * 0.5;
-        MOUSE.y = event.clientY - (window.innerHeight - WORLD.height) * 0.5;
-    }
-
-    /**
-     * Event handler for document.ontouchstart.
-     * @param event
-     */
-    function documentTouchStartHandler(event) {
-        if(event.touches.length === 1) {
-            event.preventDefault();
-
-            MOUSE.x = event.touches[0].pageX - (window.innerWidth - WORLD.width) * 0.5;
-            MOUSE.y = event.touches[0].pageY - (window.innerHeight - WORLD.height) * 0.5;
-
-            MOUSE.down = true;
-        }
-    }
-
-    /**
-     * Event handler for document.ontouchmove.
-     * @param event
-     */
-    function documentTouchMoveHandler(event) {
-        if(event.touches.length === 1) {
-            event.preventDefault();
-
-            MOUSE.x = event.touches[0].pageX - (window.innerWidth - WORLD.width) * 0.5;
-            MOUSE.y = event.touches[0].pageY - (window.innerHeight - WORLD.height) * 0.5;
-        }
-    }
-
-    /**
-     * Event handler for document.ontouchend.
-     * @param event
-     */
-    function documentTouchEndHandler(event) {
-        MOUSE.down = false;
-    }
-
-
-
-    /**
      * Called on every frame to update and render the world.
      */
     function loop() {
-
-        CAMERA.orientation.y = MOUSE.x / 1000;
-        CAMERA.orientation.x = (MOUSE.y / 1000) * -1;
-
-        //check for user interaction
-        if ( MOUSE.down ) {
-            //nothing
-        }
         if ( KEY_ACTIVATION.UP ) {
             CAMERA.move(INIT_SIZE);
         }
