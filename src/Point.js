@@ -39,6 +39,11 @@ export default class Point extends Vector {
         this.data[0][2] = z;
     }
 
+    eleMap(map) {
+        const vect = super.eleMap(map);
+        return new Point(vect[0], vect[1], vect[2]);
+    }
+
     _getRotateCoordinate(p, pr) {
         // Displace to make rotation point 0,0,0
         const t = this.minus(p);

@@ -1,5 +1,6 @@
 import Point from './Point';
 import Length from "./Length";
+import Camera from "./Camera";
 
 // The world dimensions, defaults to full screen
 const world = {
@@ -12,7 +13,7 @@ const world = {
 const world3D = new function() {
 
     // The number of times the game will be redrawn per second
-    var FRAMERATE = 100000;
+    var FRAMERATE = 20;
     var TIME = 0;
 
     // The canvas and its 2D context
@@ -120,7 +121,7 @@ const world3D = new function() {
     var renderPool = [];
 
     // create camera  and set initial position
-    var cam1 = new camera( -95, -604, -636, -0.6, 0.6, 0, 1.5, -2);
+    var cam = new Camera( new Point(-95, -604, -636), new Point(-0.6, 0.6, 0), 1.5, -2);
 
 
     /**
@@ -238,6 +239,7 @@ const world3D = new function() {
                 key.g = true;
                 event.preventDefault();
                 break;
+            default:
         }
     }
 
@@ -303,6 +305,7 @@ const world3D = new function() {
                 key.g = false;
                 event.preventDefault();
                 break;
+            default:
         }
     }
 
@@ -380,55 +383,55 @@ const world3D = new function() {
      */
     function loop() {
 
-        cam1.orientation.y = mouse.x / 1000;
-        cam1.orientation.x = (mouse.y / 1000) * -1;
+        cam.orientation.y = mouse.x / 1000;
+        cam.orientation.x = (mouse.y / 1000) * -1;
 
         //check for user interaction
         if ( mouse.down ) {
             //nothing
         }
         if ( key.up ) {
-            cam1.move(initSize);
+            cam.move(initSize);
         }
         if ( key.down ) {
-            cam1.move(-initSize);
+            cam.move(-initSize);
         }
         if ( key.left ) {
-            cam1.pan(-initSize, 0);
+            cam.pan(-initSize, 0);
         }
         if ( key.right ) {
-            cam1.pan(initSize, 0);
+            cam.pan(initSize, 0);
         }
         if ( key.r ) {
-            cam1.pan(0, -initSize);
+            cam.pan(0, -initSize);
         }
         if ( key.f ) {
-            cam1.pan(0, initSize);
+            cam.pan(0, initSize);
         }
 
         if ( key.w ) {
-            cam1.orientation.x += 0.03;
+            cam.orientation.x += 0.03;
         }
         if ( key.a) {
-            cam1.orientation.y -= 0.03;
+            cam.orientation.y -= 0.03;
         }
         if ( key.s ) {
-            cam1.orientation.x -= 0.03;
+            cam.orientation.x -= 0.03;
         }
         if ( key.d) {
-            cam1.orientation.y += 0.03;
+            cam.orientation.y += 0.03;
         }
         if ( key.q ) {
-            cam1.orientation.z -= 0.03;
+            cam.orientation.z -= 0.03;
         }
         if ( key.e) {
-            cam1.orientation.z += 0.03;
+            cam.orientation.z += 0.03;
         }
         if ( key.t ) {
-            cam1.zoom += 0.05;
+            cam.zoom += 0.05;
         }
         if ( key.g) {
-            cam1.zoom -= 0.05;
+            cam.zoom -= 0.05;
         }
 
         var temp;
@@ -439,7 +442,7 @@ const world3D = new function() {
                 continue;
             }
 
-            temp = object.getScreenCoords(world, cam1);
+            temp = object.getScreenCoords(world, cam);
             if ( ( temp.x < -world.width ) || ( temp.y < -world.height ) || ( temp.x > world.width*2 ) || ( temp.y > world.height*2 ) || ( temp.distance < 0 ) ) {
                 // do nothing
             } else {
@@ -456,75 +459,13 @@ const world3D = new function() {
         for( var i = 0, len = renderPool.length; i < len; i++ ) {
             var object = renderPool[i];
             // Render Objects
-            object.render(world, cam1, contxt,1 );
+            object.render(world, cam, contxt,1 );
         }
 
         renderPool = [];
 
         TIME += 1;
     }
-};
-
-/**
- * Defines a 3D Camera and basic operations.
- * @param xpos
- * @param ypos
- * @param zpos
- * @param xori
- * @param yori
- * @param zori
- * @param zoom
- * @param stereo
- */
-function camera( xpos, ypos, zpos, xori, yori, zori, zoom, stereo ) {
-    this.position = { x: xpos || 0, y: ypos || 0, z: zpos || 0 };
-    this.orientation = { x: xori || 0, y: yori || 0, z: zori || 0 };
-    this.zoom = zoom || 1;
-    this.stereo = stereo || 0;
-};
-camera.prototype.move = function( z ) {
-    // Displace to make rotation point 0,0,0
-    var tx = 0;
-    var ty = 0;
-    var tz = z;
-    // Precalculates Sin & Cos for rotation angles
-    var cosx = Math.cos(-this.orientation.x);
-    var cosy = Math.cos(-this.orientation.y);
-    var cosz = Math.cos(0);
-    var sinx = Math.sin(-this.orientation.x);
-    var siny = Math.sin(-this.orientation.y);
-    var sinz = Math.sin(0);
-    // Rotate Coordinate
-    // http://en.wikipedia.org/wiki/3D_projection#Perspective_projection
-    var nx = ( cosy * ( sinz * ( ty ) + cosz * ( tx ) ) - siny * ( tz ) );
-    var ny = ( sinx * ( cosy * ( tz ) + siny * ( sinz * ( ty ) + cosz * ( tx ) ) ) + cosx * ( cosz * ( ty ) - sinz * ( tx ) ) );
-    var nz = ( cosx * ( cosy * ( tz ) + siny * ( sinz * ( ty ) + cosz * ( tx ) ) ) - sinx * ( cosz * ( ty ) - sinz * ( tx ) ) );
-    // Reassign new coordinates and displace back to match rotation point
-    this.position.x += nx;
-    this.position.y += ny;
-    this.position.z += nz;
-};
-camera.prototype.pan = function( x, y ) {
-    // Displace to make rotation point 0,0,0
-    var tx = x;
-    var ty = y;
-    var tz = 0;
-    // Precalculates Sin & Cos for rotation angles
-    var cosx = Math.cos(0);
-    var cosy = Math.cos(-this.orientation.y);
-    var cosz = Math.cos(-this.orientation.z);
-    var sinx = Math.sin(0);
-    var siny = Math.sin(-this.orientation.y);
-    var sinz = Math.sin(-this.orientation.z);
-    // Rotate Coordinate
-    // http://en.wikipedia.org/wiki/3D_projection#Perspective_projection
-    var nx = ( cosy * ( sinz * ( ty ) + cosz * ( tx ) ) - siny * ( tz ) );
-    var ny = ( sinx * ( cosy * ( tz ) + siny * ( sinz * ( ty ) + cosz * ( tx ) ) ) + cosx * ( cosz * ( ty ) - sinz * ( tx ) ) );
-    var nz = ( cosx * ( cosy * ( tz ) + siny * ( sinz * ( ty ) + cosz * ( tx ) ) ) - sinx * ( cosz * ( ty ) - sinz * ( tx ) ) );
-    // Reassign new coordinates and displace back to match rotation point
-    this.position.x += nx;
-    this.position.y += ny;
-    this.position.z += nz;
 };
 
 world3D.initialize();
