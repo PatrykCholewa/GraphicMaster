@@ -1,4 +1,5 @@
 import Point from './Point';
+import Length from "./Length";
 
 // The world dimensions, defaults to full screen
 var world = {
@@ -65,20 +66,20 @@ var world3D = new function() {
     // array of cubes
     for (var i=0; i<5; i++) {
         for (var j=0; j<5; j++) {
-            objectPool.push(new line( new Point( 0+(initsize*20*i), 0, 0+(initsize*20*j) ), new Point( 0+(initsize*20*i), 0, initsize*10+(initsize*20*j) ) ));
-            objectPool.push(new line( new Point( 0+(initsize*20*i), 0, initsize*10+(initsize*20*j) ), new Point( 0+(initsize*20*i), initsize*10, initsize*10+(initsize*20*j) ) ));
-            objectPool.push(new line( new Point( 0+(initsize*20*i), initsize*10, initsize*10+(initsize*20*j) ), new Point( 0+(initsize*20*i), initsize*10, 0+(initsize*20*j) ) ));
-            objectPool.push(new line( new Point( 0+(initsize*20*i), initsize*10, 0+(initsize*20*j) ), new Point( 0+(initsize*20*i), 0, 0+(initsize*20*j) ) ));
+            objectPool.push(new Length( new Point( 0+(initsize*20*i), 0, 0+(initsize*20*j) ), new Point( 0+(initsize*20*i), 0, initsize*10+(initsize*20*j) ) ));
+            objectPool.push(new Length( new Point( 0+(initsize*20*i), 0, initsize*10+(initsize*20*j) ), new Point( 0+(initsize*20*i), initsize*10, initsize*10+(initsize*20*j) ) ));
+            objectPool.push(new Length( new Point( 0+(initsize*20*i), initsize*10, initsize*10+(initsize*20*j) ), new Point( 0+(initsize*20*i), initsize*10, 0+(initsize*20*j) ) ));
+            objectPool.push(new Length( new Point( 0+(initsize*20*i), initsize*10, 0+(initsize*20*j) ), new Point( 0+(initsize*20*i), 0, 0+(initsize*20*j) ) ));
 
-            objectPool.push(new line( new Point( initsize*10+(initsize*20*i), 0, 0+(initsize*20*j) ), new Point( initsize*10+(initsize*20*i), 0, initsize*10+(initsize*20*j) ) ));
-            objectPool.push(new line( new Point( initsize*10+(initsize*20*i), 0, initsize*10+(initsize*20*j) ), new Point( initsize*10+(initsize*20*i), initsize*10, initsize*10+(initsize*20*j) ) ));
-            objectPool.push(new line( new Point( initsize*10+(initsize*20*i), initsize*10, initsize*10+(initsize*20*j) ), new Point( initsize*10+(initsize*20*i), initsize*10, 0+(initsize*20*j) ) ));
-            objectPool.push(new line( new Point( initsize*10+(initsize*20*i), initsize*10, 0+(initsize*20*j) ), new Point( initsize*10+(initsize*20*i), 0, 0+(initsize*20*j) ) ));
+            objectPool.push(new Length( new Point( initsize*10+(initsize*20*i), 0, 0+(initsize*20*j) ), new Point( initsize*10+(initsize*20*i), 0, initsize*10+(initsize*20*j) ) ));
+            objectPool.push(new Length( new Point( initsize*10+(initsize*20*i), 0, initsize*10+(initsize*20*j) ), new Point( initsize*10+(initsize*20*i), initsize*10, initsize*10+(initsize*20*j) ) ));
+            objectPool.push(new Length( new Point( initsize*10+(initsize*20*i), initsize*10, initsize*10+(initsize*20*j) ), new Point( initsize*10+(initsize*20*i), initsize*10, 0+(initsize*20*j) ) ));
+            objectPool.push(new Length( new Point( initsize*10+(initsize*20*i), initsize*10, 0+(initsize*20*j) ), new Point( initsize*10+(initsize*20*i), 0, 0+(initsize*20*j) ) ));
 
-            objectPool.push(new line( new Point( 0+(initsize*20*i), 0, 0+(initsize*20*j) ), new Point( initsize*10+(initsize*20*i), 0, 0+(initsize*20*j) ) ));
-            objectPool.push(new line( new Point( 0+(initsize*20*i), 0, initsize*10+(initsize*20*j) ), new Point( initsize*10+(initsize*20*i), 0, initsize*10+(initsize*20*j) ) ));
-            objectPool.push(new line( new Point( 0+(initsize*20*i), initsize*10, initsize*10+(initsize*20*j) ), new Point( initsize*10+(initsize*20*i), initsize*10, initsize*10+(initsize*20*j) ) ));
-            objectPool.push(new line( new Point( 0+(initsize*20*i), initsize*10, 0+(initsize*20*j) ), new Point( initsize*10+(initsize*20*i), initsize*10, 0+(initsize*20*j) ) ));
+            objectPool.push(new Length( new Point( 0+(initsize*20*i), 0, 0+(initsize*20*j) ), new Point( initsize*10+(initsize*20*i), 0, 0+(initsize*20*j) ) ));
+            objectPool.push(new Length( new Point( 0+(initsize*20*i), 0, initsize*10+(initsize*20*j) ), new Point( initsize*10+(initsize*20*i), 0, initsize*10+(initsize*20*j) ) ));
+            objectPool.push(new Length( new Point( 0+(initsize*20*i), initsize*10, initsize*10+(initsize*20*j) ), new Point( initsize*10+(initsize*20*i), initsize*10, initsize*10+(initsize*20*j) ) ));
+            objectPool.push(new Length( new Point( 0+(initsize*20*i), initsize*10, 0+(initsize*20*j) ), new Point( initsize*10+(initsize*20*i), initsize*10, 0+(initsize*20*j) ) ));
         };
     };
 
@@ -491,37 +492,6 @@ camera.prototype.pan = function( x, y ) {
     this.position.x += nx;
     this.position.y += ny;
     this.position.z += nz;
-};
-
-function line( p1, p2 ) {
-    this.points = new Array;
-    this.points[0] = p1 || new Point( 0, 0, 0 );
-    this.points[1] = p2 || new Point( 0, 0, 0 );
-    this.tempIndex = 0;
-};
-line.prototype.rotate = function( p, pr) {
-    for (var i = 0; i < this.points.length; i++) {
-        this.points[i].rotate( p, pr);
-    };
-};
-line.prototype.getScreenCoords = function(world, c) {
-    var screenCoords = this.points[0].getScreenCoords(world, c);
-    this.tempIndex = this.points[0].tempIndex;
-    return (screenCoords);
-};
-line.prototype.render = function(world, cam, cont, str ) {
-    var screenCoords = this.points[0].getScreenCoords(world, cam);
-    var screenCoords2 = this.points[1].getScreenCoords(world, cam);
-    var distance = ((screenCoords.distance + screenCoords2.distance) / 2);
-    var brightnes = Math.round((1 / (distance / 500) ) * 255);
-    if (distance > 125) {
-        cont.beginPath();
-        cont.moveTo(screenCoords.x,screenCoords.y);
-        cont.lineTo(screenCoords2.x,screenCoords2.y);
-        cont.lineWidth = str;
-        cont.strokeStyle = 'rgba('+brightnes+','+brightnes+','+brightnes+',1.0)';
-        cont.stroke();
-    }
 };
 
 world3D.initialize();
