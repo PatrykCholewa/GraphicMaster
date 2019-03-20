@@ -79,8 +79,8 @@ export default class Point extends Vector {
         // Return ScreenCoordinates and distance to viewing plane
         this._tempIndex = n[2];
         return {
-            x : ( n[0] + c.stereo ) * c.zoom / n[2] * wld.height / 2 + wld.width / 2,
-            y : ( n[1] + c.stereo ) * c.zoom / n[2] * wld.height / 2 + wld.height / 2,
+            x : ( n[0] + c.stereo ) / n[2] * wld.height / 2 + wld.width / 2,
+            y : ( n[1] + c.stereo ) / n[2] * wld.height / 2 + wld.height / 2,
             distance : n[2]
         };
     }

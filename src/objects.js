@@ -5,7 +5,6 @@ import Point from "./Point";
 const OBJECTS_TO_RENDER = [];
 
 const INIT_SIZE = 25;
-OBJECTS_TO_RENDER.push(new Point( 0, 0, INIT_SIZE*10 ));
 
 for (let i = 0; i < 5; i++) {
     for (let j = 0; j < 5; j++) {

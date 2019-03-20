@@ -14,7 +14,7 @@ export default class App extends Component {
     constructor(props) {
         super(props);
 
-        this._camera = new Camera(new Point(-95, -604, -636), new Point(-0.6, 0.6, 0), 1.5, -2);
+        this._camera = new Camera(new Point(-95, -604, -636), new Point(-0.6, 0.6, 0), -2);
 
         this._world = {
             x: 0,
@@ -35,9 +35,7 @@ export default class App extends Component {
             Q: false,
             E: false,
             R: false,
-            F: false,
-            T: false,
-            G: false
+            F: false
         };
 
         this._keyActivatedHandlerMap = {
@@ -52,9 +50,7 @@ export default class App extends Component {
             S:     () => this._camera.orientation.x -= 0.03,
             D:     () => this._camera.orientation.y += 0.03,
             Q:     () => this._camera.orientation.z -= 0.03,
-            E:     () => this._camera.orientation.z += 0.03,
-            T:     () => this._camera.zoom += 0.05,
-            G:     () => this._camera.zoom -= 0.05
+            E:     () => this._camera.orientation.z += 0.03
         };
 
         this._canvas = null;
@@ -91,13 +87,17 @@ export default class App extends Component {
     handleKeyDown(event) {
         const keyName = REVERSE_KEY_MAP[event.which];
         event.preventDefault();
-        this._keyActivation[keyName] = true;
+        if (keyName) {
+            this._keyActivation[keyName] = true;
+        }
     };
 
     handleKeyUp(event) {
         const keyName = REVERSE_KEY_MAP[event.which];
         event.preventDefault();
-        this._keyActivation[keyName] = false;
+        if (keyName) {
+            this._keyActivation[keyName] = false;
+        }
     };
 
     loop() {

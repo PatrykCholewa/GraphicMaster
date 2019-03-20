@@ -62,6 +62,7 @@ export default class Length {
             cont.moveTo(screenCoords[0].x,screenCoords[0].y);
             cont.lineTo(screenCoords[1].x,screenCoords[1].y);
             cont.lineWidth = str;
+            cont.strokeStyle = "#FF0000";
             cont.stroke();
         }
     }
