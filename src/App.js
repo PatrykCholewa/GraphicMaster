@@ -40,35 +40,37 @@ export default class App extends Component {
             G: false
         };
 
-        this._renderPool = [];
+        this._keyActivatedHandlerMap = {
+            UP:    () => this._camera.move(INIT_SIZE),
+            DOWN:  () => this._camera.move(-INIT_SIZE),
+            LEFT:  () => this._camera.pan(-INIT_SIZE, 0),
+            RIGHT: () => this._camera.pan(INIT_SIZE, 0),
+            R:     () => this._camera.pan(0, -INIT_SIZE),
+            F:     () => this._camera.pan(0, INIT_SIZE),
+            W:     () => this._camera.orientation.x += 0.03,
+            A:     () => this._camera.orientation.y -= 0.03,
+            S:     () => this._camera.orientation.x -= 0.03,
+            D:     () => this._camera.orientation.y += 0.03,
+            Q:     () => this._camera.orientation.z -= 0.03,
+            E:     () => this._camera.orientation.z += 0.03,
+            T:     () => this._camera.zoom += 0.05,
+            G:     () => this._camera.zoom -= 0.05
+        };
 
         this._canvas = null;
         this._context = null;
-
     }
 
     componentDidMount() {
-        // Collect references to all DOM elements being used
-        this._canvas = document.getElementById('world');
+        this._context = this._canvas.getContext('2d');
 
-        // Make sure that the Canvas element is available before continuing
-        if (this._canvas && this._canvas.getContext) {
-            this._context = this._canvas.getContext('2d');
+        window.addEventListener('resize', event => this.handleWindowResize(event), false);
+        this.handleWindowResize();
 
-            // Register event listeners
-            document.addEventListener('keydown', event => this.documentKeyDownHandler(event), false);
-            document.addEventListener('keyup', event => this.documentKeyUpHandler(event), false);
-            window.addEventListener('resize', event => this.windowResizeHandler(event), false);
-
-            // Force an initial resize to make sure the UI is sized correctly
-            this.windowResizeHandler();
-
-            // Initiate the main render loop of the game
-            setInterval( () => this.loop(), 1000 / FRAMERATE );
-        }
+        setInterval( () => this.loop(), 1000 / FRAMERATE );
     }
 
-    windowResizeHandler() {
+    handleWindowResize() {
         this._world.width = window.innerWidth * 0.9;
         this._world.height = window.innerHeight * 0.9;
 
@@ -86,84 +88,39 @@ export default class App extends Component {
         this._canvas.style.top = cvy + 'px';
     };
 
-    documentKeyDownHandler(event) {
+    handleKeyDown(event) {
         const keyName = REVERSE_KEY_MAP[event.which];
         event.preventDefault();
         this._keyActivation[keyName] = true;
     };
 
-    documentKeyUpHandler(event) {
+    handleKeyUp(event) {
         const keyName = REVERSE_KEY_MAP[event.which];
         event.preventDefault();
         this._keyActivation[keyName] = false;
     };
 
     loop() {
-        if ( this._keyActivation.UP ) {
-            this._camera.move(INIT_SIZE);
-        }
-        if ( this._keyActivation.DOWN ) {
-            this._camera.move(-INIT_SIZE);
-        }
-        if ( this._keyActivation.LEFT ) {
-            this._camera.pan(-INIT_SIZE, 0);
-        }
-        if ( this._keyActivation.RIGHT ) {
-            this._camera.pan(INIT_SIZE, 0);
-        }
-        if ( this._keyActivation.R ) {
-            this._camera.pan(0, -INIT_SIZE);
-        }
-        if ( this._keyActivation.F ) {
-            this._camera.pan(0, INIT_SIZE);
-        }
+        Object.keys(this._keyActivation)
+              .filter( key => this._keyActivation[key] )
+              .forEach( key => this._keyActivatedHandlerMap[key]() );
 
-        if ( this._keyActivation.W ) {
-            this._camera.orientation.x += 0.03;
-        }
-        if ( this._keyActivation.A) {
-            this._camera.orientation.y -= 0.03;
-        }
-        if ( this._keyActivation.S ) {
-            this._camera.orientation.x -= 0.03;
-        }
-        if ( this._keyActivation.D) {
-            this._camera.orientation.y += 0.03;
-        }
-        if ( this._keyActivation.Q ) {
-            this._camera.orientation.z -= 0.03;
-        }
-        if ( this._keyActivation.E) {
-            this._camera.orientation.z += 0.03;
-        }
-        if ( this._keyActivation.T ) {
-            this._camera.zoom += 0.05;
-        }
-        if ( this._keyActivation.G) {
-            this._camera.zoom -= 0.05;
-        }
-
-        // Alter object by object and determin renderqueue
+        this._context.clearRect(0, 0, this._world.width, this._world.height);
         OBJECTS_TO_RENDER.forEach(object => {
             const temp = object.getScreenCoords(this._world, this._camera);
             if ( !( temp.x < -this._world.width ) || ( temp.y < -this._world.height ) || ( temp.x > this._world.width*2 ) || ( temp.y > this._world.height*2 ) || ( temp.distance < 0 ) ) {
-                this._renderPool.push(object);
+                object.render(this._world, this._camera, this._context, 1 )
             }
         });
-
-        // sort render Queue
-        this._renderPool.sort((a, b) => b.tempIndex - a.tempIndex);
-
-        // render Queue
-        this._context.clearRect(0, 0, this._world.width, this._world.height);
-        this._renderPool.forEach(object => object.render(this._world, this._camera, this._context, 1 ));
-
-        this._renderPool = [];
     }
 
     render() {
         return (
-            <div className="App"/>
+            <canvas id="world"
+                    ref={ref => this._canvas = ref}
+                    tabIndex="0"
+                    onKeyDown={event => this.handleKeyDown(event)}
+                    onKeyUp={event => this.handleKeyUp(event)}/>
         );
     }
 }
