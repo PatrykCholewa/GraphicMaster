@@ -2,17 +2,14 @@ import Point from './Point';
 import Length from "./Length";
 
 // The world dimensions, defaults to full screen
-var world = {
+const world = {
     x: 0,
     y: 0,
     width: 100,
     height: 100
 };
 
-/**
- *
- */
-var world3D = new function() {
+const world3D = new function() {
 
     // The number of times the game will be redrawn per second
     var FRAMERATE = 100000;
@@ -51,37 +48,73 @@ var world3D = new function() {
     var objectPool = [];
 
     // create some objects
-    var initsize = 25;
+    const initSize = 25;
     // cubeof dots
-    objectPool.push(new Point( 0, 0, initsize*10 ));
-    objectPool.push(new Point( 0, initsize*10, initsize*10 ));
-    objectPool.push(new Point( initsize*10, initsize*10, initsize*10 ));
-    objectPool.push(new Point( initsize*10, 0, initsize*10 ));
+    objectPool.push(new Point( 0, 0, initSize*10 ));
+    objectPool.push(new Point( 0, initSize*10, initSize*10 ));
+    objectPool.push(new Point( initSize*10, initSize*10, initSize*10 ));
+    objectPool.push(new Point( initSize*10, 0, initSize*10 ));
 
     objectPool.push(new Point( 0, 0, 0 ));
-    objectPool.push(new Point( 0, initsize*10, 0));
-    objectPool.push(new Point( initsize*10, initsize*10, 0 ));
-    objectPool.push(new Point( initsize*10, 0, 0 ));
+    objectPool.push(new Point( 0, initSize*10, 0));
+    objectPool.push(new Point( initSize*10, initSize*10, 0 ));
+    objectPool.push(new Point( initSize*10, 0, 0 ));
 
     // array of cubes
-    for (var i=0; i<5; i++) {
-        for (var j=0; j<5; j++) {
-            objectPool.push(new Length( new Point( 0+(initsize*20*i), 0, 0+(initsize*20*j) ), new Point( 0+(initsize*20*i), 0, initsize*10+(initsize*20*j) ) ));
-            objectPool.push(new Length( new Point( 0+(initsize*20*i), 0, initsize*10+(initsize*20*j) ), new Point( 0+(initsize*20*i), initsize*10, initsize*10+(initsize*20*j) ) ));
-            objectPool.push(new Length( new Point( 0+(initsize*20*i), initsize*10, initsize*10+(initsize*20*j) ), new Point( 0+(initsize*20*i), initsize*10, 0+(initsize*20*j) ) ));
-            objectPool.push(new Length( new Point( 0+(initsize*20*i), initsize*10, 0+(initsize*20*j) ), new Point( 0+(initsize*20*i), 0, 0+(initsize*20*j) ) ));
+    for (let i = 0; i < 5; i++) {
+        for (let j = 0; j < 5; j++) {
+            objectPool.push(new Length(
+                new Point( initSize * 20 * i, 0, initSize * 20 * j ),
+                new Point( initSize * 20 * i, 0, initSize * 10 + initSize * 20 * j )
+            ));
+            objectPool.push(new Length(
+                new Point( initSize * 20 * i, 0, initSize * 10 + initSize * 20 * j ),
+                new Point( initSize * 20 * i, initSize * 10 , initSize * 10 + initSize * 20 * j )
+            ));
+            objectPool.push(new Length(
+                new Point( initSize * 20 * i, initSize * 10, initSize * 10 + initSize * 20 * j ),
+                new Point( initSize * 20 * i, initSize * 10, initSize * 20 * j )
+            ));
+            objectPool.push(new Length(
+                new Point( initSize * 20 * i, initSize * 10, initSize * 20 * j ),
+                new Point( initSize * 20 * i, 0, initSize * 20 * j )
+            ));
 
-            objectPool.push(new Length( new Point( initsize*10+(initsize*20*i), 0, 0+(initsize*20*j) ), new Point( initsize*10+(initsize*20*i), 0, initsize*10+(initsize*20*j) ) ));
-            objectPool.push(new Length( new Point( initsize*10+(initsize*20*i), 0, initsize*10+(initsize*20*j) ), new Point( initsize*10+(initsize*20*i), initsize*10, initsize*10+(initsize*20*j) ) ));
-            objectPool.push(new Length( new Point( initsize*10+(initsize*20*i), initsize*10, initsize*10+(initsize*20*j) ), new Point( initsize*10+(initsize*20*i), initsize*10, 0+(initsize*20*j) ) ));
-            objectPool.push(new Length( new Point( initsize*10+(initsize*20*i), initsize*10, 0+(initsize*20*j) ), new Point( initsize*10+(initsize*20*i), 0, 0+(initsize*20*j) ) ));
+            objectPool.push(new Length(
+                new Point( initSize * 10 + initSize * 20 * i, 0, initSize * 20 * j ),
+                new Point( initSize * 10 + initSize * 20 * i, 0, initSize * 10 + initSize * 20 * j )
+            ));
+            objectPool.push(new Length(
+                new Point( initSize * 10 + initSize * 20 * i, 0, initSize * 10 + initSize * 20 * j ),
+                new Point( initSize * 10 + initSize * 20 * i, initSize * 10, initSize * 10 + initSize * 20 * j )
+            ));
+            objectPool.push(new Length(
+                new Point( initSize * 10 + initSize * 20 * i, initSize * 10, initSize * 10 + initSize * 20 * j ),
+                new Point( initSize * 10 + initSize * 20 * i, initSize * 10, initSize * 20 * j )
+            ));
+            objectPool.push(new Length(
+                new Point( initSize * 10 + initSize * 20 * i, initSize * 10, initSize * 20 * j ),
+                new Point( initSize * 10 + initSize * 20 * i, 0, initSize * 20 * j )
+            ));
 
-            objectPool.push(new Length( new Point( 0+(initsize*20*i), 0, 0+(initsize*20*j) ), new Point( initsize*10+(initsize*20*i), 0, 0+(initsize*20*j) ) ));
-            objectPool.push(new Length( new Point( 0+(initsize*20*i), 0, initsize*10+(initsize*20*j) ), new Point( initsize*10+(initsize*20*i), 0, initsize*10+(initsize*20*j) ) ));
-            objectPool.push(new Length( new Point( 0+(initsize*20*i), initsize*10, initsize*10+(initsize*20*j) ), new Point( initsize*10+(initsize*20*i), initsize*10, initsize*10+(initsize*20*j) ) ));
-            objectPool.push(new Length( new Point( 0+(initsize*20*i), initsize*10, 0+(initsize*20*j) ), new Point( initsize*10+(initsize*20*i), initsize*10, 0+(initsize*20*j) ) ));
-        };
-    };
+            objectPool.push(new Length(
+                new Point( initSize * 20 * i, 0, initSize * 20 * j ),
+                new Point( initSize * 10 + initSize * 20 * i, 0, initSize * 20 * j )
+            ));
+            objectPool.push(new Length(
+                new Point( initSize * 20 * i, 0, initSize * 10 + initSize * 20 * j ),
+                new Point( initSize * 10 + initSize * 20 * i, 0, initSize * 10 + initSize * 20 * j )
+            ));
+            objectPool.push(new Length(
+                new Point( initSize * 20 * i, initSize * 10, initSize * 10 + initSize * 20 * j ),
+                new Point( initSize * 10 + initSize * 20 * i, initSize * 10, initSize * 10 + initSize * 20 * j )
+            ));
+            objectPool.push(new Length(
+                new Point( initSize * 20 * i, initSize * 10, initSize * 20 * j ),
+                new Point( initSize * 10 + initSize * 20 * i, initSize * 10, initSize * 20 * j )
+            ));
+        }
+    }
 
     // container for rendering queue
     var renderPool = [];
@@ -148,7 +181,7 @@ var world3D = new function() {
      * @param event
      */
     function documentKeyDownHandler(event) {
-        switch( event.keyCode ) {
+        switch( event.which ) {
             case 38:
                 key.up = true;
                 event.preventDefault();
@@ -213,7 +246,7 @@ var world3D = new function() {
      * @param event
      */
     function documentKeyUpHandler(event) {
-        switch( event.keyCode ) {
+        switch( event.which ) {
             case 38:
                 key.up = false;
                 event.preventDefault();
@@ -355,22 +388,22 @@ var world3D = new function() {
             //nothing
         }
         if ( key.up ) {
-            cam1.move(initsize);
+            cam1.move(initSize);
         }
         if ( key.down ) {
-            cam1.move(-initsize);
+            cam1.move(-initSize);
         }
         if ( key.left ) {
-            cam1.pan(-initsize, 0);
+            cam1.pan(-initSize, 0);
         }
         if ( key.right ) {
-            cam1.pan(initsize, 0);
+            cam1.pan(initSize, 0);
         }
         if ( key.r ) {
-            cam1.pan(0, -initsize);
+            cam1.pan(0, -initSize);
         }
         if ( key.f ) {
-            cam1.pan(0, initsize);
+            cam1.pan(0, initSize);
         }
 
         if ( key.w ) {

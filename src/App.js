@@ -46,24 +46,24 @@ export default class App extends Component {
     }
 
     _lengthProjectionOnCamera(length, key) {
-        return this._getLengthAsDiv( this.state.camera.getViewOfLength(length), key );
+        return App._getLengthAsDiv( this.state.camera.getViewOfLength(length), key );
     }
 
-    _getLengthAsDiv(length, key) {
+    static _getLengthAsDiv(length, key) {
         console.log(length);
-        return <div className='length' key={key} style={this._getLengthDivStyle(length)}/>;
+        return <div className='length' key={key} style={App._getLengthDivStyle(length)}/>;
     }
 
-    _getLengthDivStyle(length) {
+    static _getLengthDivStyle(length) {
         return {
             "width": length.width + '%',
             "left": (length[0][0] + 50) + '%',
             "top": (length[0][1] + 50) + '%',
-            "transform": `rotate(${this._getLengthAngle(length)}rad)`
+            "transform": `rotate(${App._getLengthAngle(length)}rad)`
         };
     };
 
-    _getLengthAngle(length) {
+    static _getLengthAngle(length) {
         const a = length[1][1] - length[0][1];
         const c = length.width;
         const sin = a / c;
@@ -74,10 +74,7 @@ export default class App extends Component {
 
     render() {
         return (
-            <div className="App">
-                {/*<canvas id="display" ref={ctx => this._context = ctx.getContext('2d')}/>*/}
-                {/*OBJECTS_TO_RENDER.map((length, idx) => this._lengthProjectionOnCamera(length, idx))*/}
-            </div>
+            <div className="App"/>
         );
     }
 }
