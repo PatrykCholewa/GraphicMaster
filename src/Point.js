@@ -39,59 +39,45 @@ export default class Point extends Vector {
         this.data[0][2] = z;
     }
 
-    distanceTo(p) {
-        var dx = p.x - this.x;
-        var dy = p.y - this.y;
-        var dz = p.z - this.z;
-        return Math.sqrt((Math.pow(dx, 2)) + (Math.pow(dy, 2)) + (Math.pow(dz, 2)));
-    }
-
-    rotate( x, y, z, xr, yr, zr) {
+    _getRotateCoordinate(p, pr) {
         // Displace to make rotation point 0,0,0
-        var tx = this.x - x;
-        var ty = this.y - y;
-        var tz = this.z - z;
+        const t = this.minus(p);
         // Precalculates Sin & Cos for rotation angles
-        var cosx = Math.cos(xr);
-        var cosy = Math.cos(yr);
-        var cosz = Math.cos(zr);
-        var sinx = Math.sin(xr);
-        var siny = Math.sin(yr);
-        var sinz = Math.sin(zr);
+        const cos = pr.eleMap(val => Math.cos(val));
+        const sin = pr.eleMap(val => Math.sin(val));
         // Rotate Coordinate
         // http://en.wikipedia.org/wiki/3D_projection#Perspective_projection
-        var nx = ( cosy * ( sinz * ( ty ) + cosz * ( tx ) ) - siny * ( tz ) );
-        var ny = ( sinx * ( cosy * ( tz ) + siny * ( sinz * ( ty ) + cosz * ( tx ) ) ) + cosx * ( cosz * ( ty ) - sinz * ( tx ) ) );
-        var nz = ( cosx * ( cosy * ( tz ) + siny * ( sinz * ( ty ) + cosz * ( tx ) ) ) - sinx * ( cosz * ( ty ) - sinz * ( tx ) ) );
+        return new Point([
+            cos[1] * ( sin[2] * t[1] + cos[2] * t[0] ) - sin[1] * t[2],
+            sin[0] * ( cos[1] * t[2] + sin[1] * ( sin[2] * t[1] + cos[2] * t[0] ) ) + cos[0] * ( cos[2] * t[1] - sin[2] * t[0] ),
+            cos[0] * ( cos[1] * t[2] + sin[1] * ( sin[2] * t[1] + cos[2] * t[0] ) ) - sin[0] * ( cos[2] * t[1] - sin[2] * t[0] )
+        ]);
+    }
+
+    distanceTo(p) {
+        return Math.sqrt(
+            this.minus(p)
+                .eleMap(val => val*val)
+                .getSum()
+        );
+    }
+
+    rotate(p, pr) {
         // Reassign new coordinates and displace back to match rotation point
-        this.data[0][0] = nx + x;
-        this.data[0][1] = ny + y;
-        this.data[0][2] = nz + z;
+        this.plus_(  this._getRotateCoordinate(p, pr));
     }
 
     getScreenCoords(wld, c) {
-        // Displace to make rotation point 0,0,0
-        var tx = this.x - c.position.x;
-        var ty = this.y - c.position.y;
-        var tz = this.z - c.position.z;
-        // Precalculates Sin & Cos for rotation angles
-        var cosx = Math.cos(c.orientation.x);
-        var cosy = Math.cos(c.orientation.y);
-        var cosz = Math.cos(c.orientation.z);
-        var sinx = Math.sin(c.orientation.x);
-        var siny = Math.sin(c.orientation.y);
-        var sinz = Math.sin(c.orientation.z);
-        // Rotate Coordinate
-        // http://en.wikipedia.org/wiki/3D_projection#Perspective_projection
-        var nx = ( cosy * ( sinz * ( ty ) + cosz * ( tx ) ) - siny * ( tz ) );
-        var ny = ( sinx * ( cosy * ( tz ) + siny * ( sinz * ( ty ) + cosz * ( tx ) ) ) + cosx * ( cosz * ( ty ) - sinz * ( tx ) ) );
-        var nz = ( cosx * ( cosy * ( tz ) + siny * ( sinz * ( ty ) + cosz * ( tx ) ) ) - sinx * ( cosz * ( ty ) - sinz * ( tx ) ) );
+        const cPosition = new Point(c.position.x, c.position.y, c.position.z);
+        const cOrientation = new Point(c.orientation.x, c.orientation.y, c.orientation.z);
+
+        const n = this._getRotateCoordinate(cPosition, cOrientation);
         // Return ScreenCoordinates and distance to viewing plane
-        this._tempIndex = nz;
+        this._tempIndex = n[2];
         return {
-            x : (((nx+c.stereo) * (c.zoom/nz)) * (wld.height/2)) + (wld.width/2),
-            y : (((ny+c.stereo) * (c.zoom/nz)) * (wld.height/2)) + (wld.height/2),
-            distance : nz
+            x : ( n[0] + c.stereo ) * c.zoom / n[2] * wld.height / 2 + wld.width / 2,
+            y : ( n[1] + c.stereo ) * c.zoom / n[2] * wld.height / 2 + wld.height / 2,
+            distance : n[2]
         };
     }
 
@@ -102,8 +88,8 @@ export default class Point extends Vector {
         if (screenCoords.distance > 0) {
             // Draw Circle
             cont.beginPath();
-            cont.arc( screenCoords.x, screenCoords.y, str*2, 0, Math.PI*2, true );
-            cont.strokeStyle = 'rgba('+255+','+255+','+255+',1.0)';
+            cont.arc( screenCoords.x, screenCoords.y, str * 2, 0, Math.PI * 2, true );
+            cont.strokeStyle = 'rgba(255,255,255,1.0)';
             cont.lineWidth = 1;
             cont.stroke();
         }

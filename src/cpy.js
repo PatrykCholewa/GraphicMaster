@@ -499,9 +499,9 @@ function line( p1, p2 ) {
     this.points[1] = p2 || new Point( 0, 0, 0 );
     this.tempIndex = 0;
 };
-line.prototype.rotate = function( x, y, z, xr, yr, zr) {
+line.prototype.rotate = function( p, pr) {
     for (var i = 0; i < this.points.length; i++) {
-        this.points[i].rotate( x, y, z, xr, yr, zr);
+        this.points[i].rotate( p, pr);
     };
 };
 line.prototype.getScreenCoords = function(world, c) {
