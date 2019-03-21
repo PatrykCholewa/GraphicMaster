@@ -44,8 +44,7 @@ export default class Length {
 
     render(world, cam, cont, str ) {
         const screenCoords = this._points.map(point => point.getScreenCoords(world, cam));
-        const distance = screenCoords.reduce((acc, coord) => acc + coord.distance, 0) / 2;
-        if (distance > 125) {
+        if (screenCoords.every(coord => coord.distance > 0)) {
             cont.beginPath();
             cont.moveTo(screenCoords[0].x,screenCoords[0].y);
             cont.lineTo(screenCoords[1].x,screenCoords[1].y);

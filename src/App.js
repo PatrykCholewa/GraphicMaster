@@ -6,7 +6,7 @@ import Point from "./Point";
 import REVERSE_KEY_MAP from "./util";
 import OBJECTS_TO_RENDER from "./objects";
 
-const FRAMERATE = 20;
+const FRAMERATE = 6;
 const INIT_SIZE = 25;
 
 export default class App extends Component {
@@ -14,7 +14,7 @@ export default class App extends Component {
     constructor(props) {
         super(props);
 
-        this._camera = new Camera(new Point(-95, -604, -636), new Point(-0.6, 0.6, 0), -2);
+        this._camera = new Camera(new Point(400, -30, -536), new Point(0, 0, 0));
 
         this._world = {
             x: 0,

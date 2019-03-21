@@ -1,4 +1,4 @@
-import Vector from "./Vector";
+import Vector, {Matrix} from "./Vector";
 
 export default class Point extends Vector {
 
@@ -38,11 +38,28 @@ export default class Point extends Vector {
     static getRotateCoordinate(t, rotateAngle) {
         const cos = rotateAngle.eleMap(val => Math.cos(val));
         const sin = rotateAngle.eleMap(val => Math.sin(val));
-        return new Point(
-            cos[1] * ( sin[2] * t[1] + cos[2] * t[0] ) - sin[1] * t[2],
-            sin[0] * ( cos[1] * t[2] + sin[1] * ( sin[2] * t[1] + cos[2] * t[0] ) ) + cos[0] * ( cos[2] * t[1] - sin[2] * t[0] ),
-            cos[0] * ( cos[1] * t[2] + sin[1] * ( sin[2] * t[1] + cos[2] * t[0] ) ) - sin[0] * ( cos[2] * t[1] - sin[2] * t[0] )
-        );
+
+        // const c2 = new Point(
+        //     cos[1] * ( sin[2] * t[1] + cos[2] * t[0] ) - sin[1] * t[2],
+        //     sin[0] * ( cos[1] * t[2] + sin[1] * ( sin[2] * t[1] + cos[2] * t[0] ) ) + cos[0] * ( cos[2] * t[1] - sin[2] * t[0] ),
+        //     cos[0] * ( cos[1] * t[2] + sin[1] * ( sin[2] * t[1] + cos[2] * t[0] ) ) - sin[0] * ( cos[2] * t[1] - sin[2] * t[0] )
+        // );
+
+        const c2m = new Matrix([
+            [1, 0, 0],
+            [0, cos[0], sin[0]],
+            [0, -sin[0], cos[0]]
+        ]).dot(new Matrix([
+            [cos[1], 0, -sin[1]],
+            [0, 1, 0],
+            [sin[1], 0, cos[1]]
+        ])).dot(new Matrix([
+            [cos[2], sin[2], 0],
+            [-sin[2], cos[2], 0],
+            [0, 0, 1]
+        ])).dot(t.trans());
+
+        return new Point(c2m.data[0][0], c2m.data[1][0], c2m.data[2][0]);
     }
 
     distanceTo(p) {
@@ -58,26 +75,12 @@ export default class Point extends Vector {
     }
 
     getScreenCoords(wld, c) {
-        const cPosition = new Point(c.position.x, c.position.y, c.position.z);
-        const cOrientation = new Point(c.orientation.x, c.orientation.y, c.orientation.z);
-
-        const n = Point.getRotateCoordinate(this.minus(cPosition), cOrientation);
+        const n = Point.getRotateCoordinate(this.minus(c.position), c.orientation);
         return {
-            x : ( n[0] + c.stereo ) / n[2] * wld.height / 2 + wld.width / 2,
-            y : ( n[1] + c.stereo ) / n[2] * wld.height / 2 + wld.height / 2,
-            distance : n[2]
+            x: n[0] / n[2] * wld.height / 2 + wld.width / 2,
+            y: n[1] / n[2] * wld.height / 2 + wld.width / 2,
+            distance: n[2]
         };
-    }
-
-    render( wld, cam, cont, str ) {
-        var screenCoords = this.getScreenCoords(wld, cam);
-        if (screenCoords.distance > 0) {
-            cont.beginPath();
-            cont.arc( screenCoords.x, screenCoords.y, str * 2, 0, Math.PI * 2, true );
-            cont.strokeStyle = 'rgba(255,255,255,1.0)';
-            cont.lineWidth = 1;
-            cont.stroke();
-        }
     }
 
 }
