@@ -38,8 +38,8 @@ export default class Length {
         this._points.forEach(point => point.rotate(p, pr));
     }
 
-    getScreenCoords(world, c) {
-        return this._points[0].getScreenCoords(world, c);
+    getScreenCoords(world, camera) {
+        return this._points[0].getScreenCoords(world, camera);
     }
 
     render(world, camera, context) {
