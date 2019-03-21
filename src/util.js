@@ -10,7 +10,9 @@ export const KEY_MAP = {
     Q:     81,
     E:     69,
     R:     82,
-    F:     70
+    F:     70,
+    T:     84,
+    G:     71
 };
 
 const REVERSE_KEY_MAP = {};

@@ -2,9 +2,18 @@ import Point from "./Point";
 
 export default class Camera {
 
-    constructor( pos, ori ) {
+    constructor( pos, ori, zoom ) {
         this._position = pos;
         this._orientation = ori;
+        this._zoom = zoom;
+    }
+
+    get zoom() {
+        return this._zoom;
+    }
+
+    set zoom(z) {
+        this._zoom = z;
     }
 
     get position() {

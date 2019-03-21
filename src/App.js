@@ -6,7 +6,7 @@ import Point from "./Point";
 import REVERSE_KEY_MAP from "./util";
 import OBJECTS_TO_RENDER from "./objects";
 
-const FRAMERATE = 6;
+const FRAMERATE = 15;
 const INIT_SIZE = 25;
 
 export default class App extends Component {
@@ -14,7 +14,7 @@ export default class App extends Component {
     constructor(props) {
         super(props);
 
-        this._camera = new Camera(new Point(400, -30, -536), new Point(0, 0, 0));
+        this._camera = new Camera(new Point(400, -30, -536), new Point(0, 0, 0), 1);
 
         this._world = {
             x: 0,
@@ -35,7 +35,9 @@ export default class App extends Component {
             Q: false,
             E: false,
             R: false,
-            F: false
+            F: false,
+            T: false,
+            G: false
         };
 
         this._keyActivatedHandlerMap = {
@@ -50,7 +52,9 @@ export default class App extends Component {
             S:     () => this._camera.orientation.x -= 0.03,
             D:     () => this._camera.orientation.y += 0.03,
             Q:     () => this._camera.orientation.z -= 0.03,
-            E:     () => this._camera.orientation.z += 0.03
+            E:     () => this._camera.orientation.z += 0.03,
+            T:     () => this._camera.zoom += 0.05,
+            G:     () => this._camera.zoom -= 0.05
         };
 
         this._canvas = null;

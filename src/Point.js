@@ -77,8 +77,8 @@ export default class Point extends Vector {
     getScreenCoords(wld, c) {
         const n = Point.getRotateCoordinate(this.minus(c.position), c.orientation);
         return {
-            x: n[0] / n[2] * wld.height / 2 + wld.width / 2,
-            y: n[1] / n[2] * wld.height / 2 + wld.width / 2,
+            x: n[0] / n[2] * c.zoom * wld.height / 2 + wld.width / 2,
+            y: n[1] / n[2] * c.zoom * wld.height / 2 + wld.width / 2,
             distance: n[2]
         };
     }
