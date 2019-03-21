@@ -35,8 +35,8 @@ export default class Camera {
     move( z ) {
         const t = new Point(0, 0, z);
 
-        const rotationAngle = new Point(-this._orientation.x, -this._orientation.y, 0);
-        const n = Point.getRotateCoordinate(t, rotationAngle);
+        const rotation = new Point(-this._orientation.x, -this._orientation.y, 0);
+        const n = Point.getRotateCoordinate(t, rotation);
 
         this._position.plus_(n);
     }

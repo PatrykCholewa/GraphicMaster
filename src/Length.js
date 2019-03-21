@@ -42,15 +42,15 @@ export default class Length {
         return this._points[0].getScreenCoords(world, c);
     }
 
-    render(world, cam, cont, str ) {
-        const screenCoords = this._points.map(point => point.getScreenCoords(world, cam));
+    render(world, camera, context) {
+        const screenCoords = this._points.map(point => point.getScreenCoords(world, camera));
         if (screenCoords.every(coord => coord.distance > 0)) {
-            cont.beginPath();
-            cont.moveTo(screenCoords[0].x,screenCoords[0].y);
-            cont.lineTo(screenCoords[1].x,screenCoords[1].y);
-            cont.lineWidth = str;
-            cont.strokeStyle = "#FF0000";
-            cont.stroke();
+            context.beginPath();
+            context.moveTo(screenCoords[0].x,screenCoords[0].y);
+            context.lineTo(screenCoords[1].x,screenCoords[1].y);
+            context.lineWidth = 1;
+            context.strokeStyle = "#FF0000";
+            context.stroke();
         }
     }
 

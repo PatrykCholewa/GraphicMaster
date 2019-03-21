@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
-
-import './cpy';
 import Camera from "./Camera";
 import Point from "./Point";
 import REVERSE_KEY_MAP from "./util";
 import OBJECTS_TO_RENDER from "./objects";
 
 const FRAMERATE = 15;
-const INIT_SIZE = 25;
+const MOVE_UNIT = 25;
 
 export default class App extends Component {
 
@@ -41,12 +39,12 @@ export default class App extends Component {
         };
 
         this._keyActivatedHandlerMap = {
-            UP:    () => this._camera.move(INIT_SIZE),
-            DOWN:  () => this._camera.move(-INIT_SIZE),
-            LEFT:  () => this._camera.pan(-INIT_SIZE, 0),
-            RIGHT: () => this._camera.pan(INIT_SIZE, 0),
-            R:     () => this._camera.pan(0, -INIT_SIZE),
-            F:     () => this._camera.pan(0, INIT_SIZE),
+            UP:    () => this._camera.move(MOVE_UNIT),
+            DOWN:  () => this._camera.move(-MOVE_UNIT),
+            LEFT:  () => this._camera.pan(-MOVE_UNIT, 0),
+            RIGHT: () => this._camera.pan(MOVE_UNIT, 0),
+            R:     () => this._camera.pan(0, -MOVE_UNIT),
+            F:     () => this._camera.pan(0, MOVE_UNIT),
             W:     () => this._camera.orientation.x += 0.03,
             A:     () => this._camera.orientation.y -= 0.03,
             S:     () => this._camera.orientation.x -= 0.03,
@@ -110,7 +108,7 @@ export default class App extends Component {
         OBJECTS_TO_RENDER.forEach(object => {
             const temp = object.getScreenCoords(this._world, this._camera);
             if ( !( temp.x < -this._world.width ) || ( temp.y < -this._world.height ) || ( temp.x > this._world.width*2 ) || ( temp.y > this._world.height*2 ) || ( temp.distance < 0 ) ) {
-                object.render(this._world, this._camera, this._context, 1 )
+                object.render(this._world, this._camera, this._context )
             }
         });
     }

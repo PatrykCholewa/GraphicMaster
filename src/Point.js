@@ -35,15 +35,9 @@ export default class Point extends Vector {
         return new Point(vect[0], vect[1], vect[2]);
     }
 
-    static getRotateCoordinate(t, rotateAngle) {
-        const cos = rotateAngle.eleMap(val => Math.cos(val));
-        const sin = rotateAngle.eleMap(val => Math.sin(val));
-
-        // const c2 = new Point(
-        //     cos[1] * ( sin[2] * t[1] + cos[2] * t[0] ) - sin[1] * t[2],
-        //     sin[0] * ( cos[1] * t[2] + sin[1] * ( sin[2] * t[1] + cos[2] * t[0] ) ) + cos[0] * ( cos[2] * t[1] - sin[2] * t[0] ),
-        //     cos[0] * ( cos[1] * t[2] + sin[1] * ( sin[2] * t[1] + cos[2] * t[0] ) ) - sin[0] * ( cos[2] * t[1] - sin[2] * t[0] )
-        // );
+    static getRotateCoordinate(t, rotation) {
+        const cos = rotation.eleMap(val => Math.cos(val));
+        const sin = rotation.eleMap(val => Math.sin(val));
 
         const c2m = new Matrix([
             [1, 0, 0],
@@ -70,15 +64,15 @@ export default class Point extends Vector {
         );
     }
 
-    rotate(p, pr) {
-        this.plus_( Point.getRotateCoordinate(this.minus(p), pr) );
+    rotate(point, rotation) {
+        this.plus_( Point.getRotateCoordinate(this.minus(point), rotation) );
     }
 
-    getScreenCoords(wld, c) {
-        const n = Point.getRotateCoordinate(this.minus(c.position), c.orientation);
+    getScreenCoords(world, camera) {
+        const n = Point.getRotateCoordinate(this.minus(camera.position), camera.orientation);
         return {
-            x: n[0] / n[2] * c.zoom * wld.height / 2 + wld.width / 2,
-            y: n[1] / n[2] * c.zoom * wld.height / 2 + wld.width / 2,
+            x: n[0] / n[2] * camera.zoom * world.height / 2 + world.width / 2,
+            y: n[1] / n[2] * camera.zoom * world.height / 2 + world.width / 2,
             distance: n[2]
         };
     }
