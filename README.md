@@ -4,6 +4,6 @@ Aplikacja powstała na przedmiot _Grafika Komputerowa_ na __Politechnice Warszaw
 
 ## Sterowanie
 
-← → ↑ ↓ R F - ruch kamerą
-W S A D Q E - obrót kamery
-T G         - przybliżanie
+- ← → ↑ ↓ R F - ruch kamerą
+- W S A D Q E - obrót kamery
+- T G         - przybliżanie
